@@ -1,0 +1,131 @@
+<style>
+    .queryBox {
+        width: 290px;
+    }
+</style>
+<!-- 整体视窗 start-->
+<div class="row" id="logsInfo" ng-controller="logsInfo" ng-init="init()">
+
+    <!-- 提示框  start-->
+    <toaster-container
+            toaster-options="{'position-class': 'toast-center-center', 'close-button':true}"></toaster-container>
+    <!-- 提示框 end -->
+
+    <!-- 响应式布局 start -->
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+
+        <!-- 带标题的内容区域 start -->
+        <div class="well">
+
+            <!-- 标题 start -->
+            <!-- <div class="header bordered-pink">登入日志</div> -->
+            <!-- 标题 end -->
+
+            <!-- 条件选择区域 start -->
+            <div class="row" id="checkSection">
+                <!-- 查询条件 -->
+                <div class="queryBox" ng-repeat="item in allData" ng-style="boxWidth('{{item}}')">
+                    <!-- 输入框 -->
+                    <div ng-if="!item.isdate && !item.iscombo && !item.istree">
+                        <label class="text col-sm-4 control-label">
+                            <span class="text labelText">{{item.cdesc}}</span>
+                        </label>
+                        <input type="text" class="input-sm col-sm-8 labelInput" placeholder="请输入查询条件"
+                               ng-model="item.filter">
+                    </div>
+                    <!-- 下拉 -->
+                    <div ng-if="item.iscombo">
+                        <label class="text col-sm-4 control-label">
+                            <span class="text labelText">{{item.cdesc}}</span>
+                        </label>
+                        <div class="col-sm-8 select-group-form">
+                            <select ng-model="item.filter" style="width: 100%" class="input-sm" title="">
+                                <option value=""></option>
+                                <option ng-repeat="x in querycombo[item.key]" value="{{ x.value }}">{{x.key}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- 日期范围 -->
+                    <div ng-if="item.isdate">
+                        <label class="text col-sm-4 control-label no-padding-left no-padding-right">
+                            <span class="text labelText">{{item.cdesc}}</span>
+                        </label>
+                        <div class="col-sm-8 select-group-form">
+                            <input date-range-picker id="rangeDate"
+                                   class="labelInput date-picker input-sm date-picker-input" type="text"
+                                   ng-model="item.dates" options="rangeoptions" clearable="true" title=""/>
+                            <!-- <i ng-show="item.dates.startDate||item.dates.endDate" class="fa fa-trash date-picker-clear" ng-click="item.dates = null"></i> -->
+                        </div>
+                    </div>
+                    <!-- 弹框+树 -->
+                    <div ng-if="item.istree">
+                        <label class="text col-sm-4 control-label no-padding-left no-padding-right">
+                            <span class="text labelText no-padding-left no-padding-right">{{item.cdesc}}</span>
+                        </label>
+                        <div class="col-sm-8 select-group-form">
+                            <div class="input-group">
+                                <input type="text" class="form-control input-sm" ng-model="parentid" disabled title="">
+                                <span class="input-group-btn">
+									<button type="button" data-toggle="modal" data-target="#searchModal"
+                                            class="btn btn-default">
+                                   		<span class="fa fa-search"></span>
+                                	</button>
+                 				</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="searchModal" class="modal fade" role="dialog" v>
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">执法单位 </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <multiselect-searchtree
+                                            multi-select="false"
+                                            filter-type="hidden"
+                                            data-input-model="searchStuff"
+                                            data-output-model="searchArr"
+                                            data-callback="SearchCallback(item, selectedItems)"
+                                            data-select-only-leafs="false">
+                                    </multiselect-searchtree>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default closeTree" data-dismiss="modal">确定
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 操作按钮区域 start -->
+                <div style="display:block;float:left;margin-left:1rem" class="row" id="operSection">
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="query()">查询</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="clear()">取消</a>
+                </div>
+                <!-- 操作按钮区域 end -->
+            </div>
+            <!-- 条件选择区域 end -->
+            <!-- 图表区域 start -->
+            <div class="row"
+                 style="padding-top: 10px; border-top: 3px solid rgb(87, 181, 227)"
+                 id="dataSection">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <table id="table" class="table table-condensed" data-filter-control='true'></table>
+                </div>
+            </div>
+            <!-- 图表区域 end -->
+
+        </div>
+        <!-- 带标题的内容区域 end -->
+
+    </div>
+    <!-- 响应式布局 end -->
+
+</div>
+<!-- 整体视窗 end-->
+
+<script src="../static/js/app/controllers/sysLogsInfo.js"></script>

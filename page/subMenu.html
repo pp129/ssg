@@ -1,0 +1,27 @@
+<div ng-controller="subMenuCtrl">
+    <!-- 提示框  start-->
+    <toaster-container
+            toaster-options="{'close-button':false, 'time-out':{ 'toast-warning': 2000, 'toast-error': 0 } }"></toaster-container>
+    <!-- 提示框 end -->
+    <div class="row">
+        <div class="col-lg-3 col-sm-6 col-xs-12" ng-repeat="item in funList">
+            <div class="databox databox-lg databox-inverted radius-bordered databox-shadowed databox-graded databox-vertical"
+                 ng-click="jump('{{item.funid}}','app.{{item.funcode}}')">
+                <div class="databox-top icon-top bg-info no-padding">
+                    <div class="databox-icon">
+                        <i ng-if="item['iconcls']" class="fa fa-{{item['iconcls']}}"></i>
+                        <i ng-if="!item['iconcls']" class="fa fa-file-text"></i>
+                    </div>
+                </div>
+                <div class="databox-bottom no-padding bordered-thick bordered-blue">
+                    <div class="databox-row">
+                        <div class="databox-cell cell-12 no-padding text-align-center bordered-right bordered-platinum">
+                            <span class="databox-number databox-number-min lightcarbon no-margin">{{item.funname}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../static/js/app/controllers/submenu.js"></script>

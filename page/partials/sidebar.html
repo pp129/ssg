@@ -1,0 +1,128 @@
+﻿<!-- Page Sidebar Header-->
+<div class="sidebar-header-wrapper">
+    <!-- <input type="text" class="searchinput" />
+    <i class="searchicon fa fa-search"></i>
+    <div class="searchhelper">Search Reports, Charts, Emails or Notifications</div> -->
+</div>
+<!-- /Page Sidebar Header -->
+
+<div ng-controller="menuTree">
+
+    <!-- <ul class="nav sidebar-menu" ng-repeat="li in list">
+        <li ng-if="li.childList.length<=0" ui-sref-active="active">
+            <a ui-sref="app.{{li.funcode}}">
+                <span class="menu-text">{{li.funcname}}</span>
+            </a>
+        </li>
+        <li ng-if="li.childList.length>0">
+            <a href="#" class="menu-dropdown">
+                <span class="menu-text">{{li.funname}}</span>
+                <i class="menu-expand"></i>
+            </a>
+            <ul class="submenu">
+                <li ng-repeat="subLi in li.childList" ng-if="subLi.childList.length<=0" ui-sref-active="active">
+                    <a ui-sref="app.{{subLi.funcode}}">
+                        <span class="menu-text">{{subLi.funname}}</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul> -->
+
+    <tree-view tree-data="sideBarList"></tree-view>
+</div>
+
+<script type="text/ng-template" id="treeView.html">
+    <ul class="nav sidebar-menu">
+        <li ui-sref-active="active" ng-repeat="item in treeData" ng-if="item.funcode=='dashboard'">
+            <a ui-sref="app.dashboard">
+                <i class="menu-icon glyphicon glyphicon-home"></i>
+                <span class="menu-text"> 主页 </span>
+            </a>
+        </li>
+        <li ui-sref-active="active" ng-repeat="item in treeData" ng-if="item.funcode!='dashboard'"
+            ng-include="'treeItem.html'">
+
+        </li>
+    </ul>
+</script>
+
+<script type="text/ng-template" id="treeItem.html">
+    <a ng-if="hasChild(item) && !isButton(item)" class="menu-dropdown"
+       href="javascript:void(0);">
+        <i ng-if="hasIcon(item)" class="menu-icon fa fa-{{item.iconcls}}"></i>
+        <span class="menu-text">{{item.funname}}</span>
+        <i class="menu-expand"></i>
+    </a>
+    <ul ng-class="{'submenu':hasChild(item)}">
+        <li ui-sref-active="active" ng-repeat="item in item.childList" ng-include="'treeItem.html'"></li>
+    </ul>
+
+    <a ng-if="!hasChild(item) && !isQuery(item) && !isButton(item)" ui-sref="app.{{item.funcode}}">
+        <i ng-if="hasIcon(item)" class="menu-icon fa fa-{{item.iconcls}}"></i>
+        <span class="menu-text">{{item.funname}}</span>
+    </a>
+    <a ng-if="!hasChild(item) && isQuery(item)" ng-click="go('{{item}}')" href="javascript:void(0);">
+        <i ng-if="hasIcon(item)" class="menu-icon fa fa-{{item.iconcls}}"></i>
+        <span class="menu-text">{{item.funname}}</span>
+    </a>
+</script>
+
+<script>
+    app.directive('treeView', function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'treeView.html',
+            scope: {
+                treeData: '='
+            },
+            controller: function ($scope, $state) {
+                $scope.hasChild = function (item) {
+                    //console.log(eval(item));
+                    var ba = [];
+                    if (!item.childList || item.childList.length <= 0) {
+                        return false
+                    } else {
+                        angular.forEach(item.childList, function (value) {
+                            if (value.funtype === '2') {
+                                ba.push(value)
+                            }
+                        });
+                        return ba.length <= 0;
+                    }
+                };
+                $scope.hasIcon = function (item) {
+                    return !!item.iconcls;
+                };
+                $scope.isQuery = function (item) {
+                    return item.funcode.indexOf('!') > -1;
+                };
+                $scope.isButton = function (item) {
+                    return item.funtype === '2';
+                };
+                $scope.go = function (item) {
+                    console.log(item);
+                    var index = item.funcode.indexOf('!');
+                    var url = 'app.' + item.funcode;
+                    var param = item.funcode.substring(index + 1);
+                    //$state.go(url, {param: param})
+                };
+                $scope.sub = function (item) {
+                    var url = 'app.subMenu' + eval('[' + item + ']')[0].funcode;
+                    var param = eval('[' + item + ']')[0].funid;
+                    $state.go(url, {param: param, menucode: eval('[' + item + ']')[0].funid, form: false})
+                }
+            }
+        };
+    }).controller('menuTree', function ($scope, $rootScope) {
+        $.ajax({
+            url: '../adminjson/funtreelist.json',
+            type: 'GET',
+            async: false,
+            success: function (data) {
+                console.log(data);
+                $rootScope.sideBarList = data;
+            }
+        });
+    })
+</script>

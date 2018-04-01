@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title>登录</title>
+    <link rel="shortcut icon" href="../static/img/xmplogo.png" type="image/x-icon">
+    <!-- <link rel="shortcut icon" href="assets/img/favicon.png" type="image/x-icon"> -->
+
+    <!--Basic Styles-->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../static/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="../static/css/weather-icons.min.css" rel="stylesheet"/>
+
+    <!--Fonts-->
+    <style>
+        /*@font-face {
+            font-family: 'WYekan';
+            src: url('/assets/fonts/BYekan.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }*/
+    </style>
+    <link href="http://fonts.googleapis.com/earlyaccess/droidarabickufi.css" rel="stylesheet" type="text/css"/>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300"
+          rel="stylesheet" type="text/css">
+
+    <!--Beyond styles-->
+    <link ng-if="!settings.rtl" href="../static/css/beyond.css" rel="stylesheet"/>
+    <link href="../static/css/demo.css" rel="stylesheet"/>
+    <link href="../static/css/typicons.min.css" rel="stylesheet"/>
+    <link href="../static/css/animate.min.css" rel="stylesheet"/>
+    <!-- <link ng-href="{{settings.skin}}" rel="stylesheet" type="text/css" /> -->
+
+</head>
+<body>
+<div ui-view autoscroll="false">
+    <div class="login-container animated fadeInDown">
+        <div class="loginbox bg-white">
+            <div class="loginbox-title">登录</div>
+            <div class="loginbox-social">
+                <div class="social-title ">行政执法信息管理系统</div>
+                <div class="social-title ">
+                    推荐使用<b style="color: red;">谷歌CHROME</b>浏览器<br>
+                    360浏览器请以<b style="color: red;">极速模式</b>访问
+                </div>
+                <!-- <div class="social-buttons">
+                    <a href="" class="button-facebook">
+                        <i class="social-icon fa fa-facebook"></i>
+                    </a>
+                    <a href="" class="button-twitter">
+                        <i class="social-icon fa fa-twitter"></i>
+                    </a>
+                    <a href="" class="button-google">
+                        <i class="social-icon fa fa-google-plus"></i>
+                    </a>
+                </div> -->
+            </div>
+            <form id="actionform" name="actionform">
+                <div class="loginbox-or">
+                    <div class="or-line"></div>
+                    <!-- <div class="or">OR</div> -->
+                </div>
+                <div class="loginbox-textbox" id="userBox">
+                    <input type="text" class="form-control" placeholder="帐号" id="userid" name="usercode"/>
+                    <span id="warnUser" class="help-block" style="display:none;margin-bottom:0;"></span>
+                </div>
+                <div class="loginbox-textbox" id="pwdBox">
+                    <input type="password" class="form-control" placeholder="密码" id="userpassid" name="password"/>
+                    <span id="warnPwd" class="help-block" style="display:none;margin-bottom:0;"></span>
+                </div>
+                <div class="loginbox-textbox row" id="authBox">
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="请输入验证码" id="auth" name="validatecode"/>
+                        <span id="warnAuth" class="help-block" style="display:none;margin-bottom:0;"></span>
+                    </div>
+                    <label for="img" class="col-sm-4 control-label" style="padding-left:0">
+                        <img src="../validatecode" alt="" id="authCode" onclick="changeImg()"/>
+                        <input type="hidden" value="${sessionScope.VALIDATE_CODE}" id="img"/>
+                    </label>
+
+                </div>
+
+                <!-- <div class="loginbox-forgot">
+                    <a href="">Forgot Password?</a>
+                </div> -->
+                <div class="loginbox-submit">
+                    <button type="button" class="btn btn-primary btn-block" id="login">登录</button>
+                </div>
+                <div class="loginbox-submit">
+                    <button type="button" class="btn btn-success btn-block" id="clear">取消</button>
+                </div>
+                <div class="has-error text-center">
+                    <span id="errorMsg" class="help-block" style="display:none;margin-bottom:0;"></span>
+                </div>
+            </form>
+            <!-- <div class="loginbox-signup">
+                <a href="register.html">Sign Up With Email</a>
+            </div> -->
+        </div>
+        <!-- <div class="logobox">
+        </div> -->
+    </div>
+</div>
+</body>
+
+<script src="../static/js/lib/jquery/jquery.min.js"></script>
+<script src="../static/js/md5.js"></script>
+<script>
+    /*$.ajax({
+        url: './validatecode',
+        type: 'get',
+        success: function (data) {
+            console.log(data)
+        }
+    });*/
+    $(document).keydown(function (event) {
+        var e = event || window.event;
+        var k = e.keyCode || e.which;
+        if (k === 13) {
+            checkUser();
+        }
+    });
+    $("#clear").click(function () {
+        $("form input").val("");
+    });
+    $('form input').on('input propertychange blur', function () {
+        var id = this.id;
+        var inputlen = $(this).val().length;
+        if (id === 'userid') {
+            if (inputlen > 0) {
+                $("#userBox").removeClass("has-error");
+                $("#warnUser").hide();
+            } else {
+                $("#userBox").addClass("has-error");
+                $("#warnUser").text("用户名不能为空").show();
+            }
+        }
+        if (id === 'userpassid') {
+            if (inputlen > 0) {
+                $("#pwdBox").removeClass("has-error");
+                $("#warnPwd").hide();
+            } else {
+                $("#pwdBox").addClass("has-error");
+                $("#warnPwd").text("密码不能为空").show();
+            }
+        }
+        if (id === 'auth') {
+            if (inputlen > 0) {
+                $("#authBox").removeClass("has-error");
+                $("#warnAuth").hide();
+            } else {
+                $("#authBox").addClass("has-error");
+                $("#warnAuth").text("验证码不能为空").show();
+            }
+        }
+    });
+    $("#login").click(function () {
+        checkUser();
+    });
+
+    function changeImg() {
+        $("#authCode").attr("src", "../validatecode?d=" + new Date().valueOf());
+    }
+
+    function checkUser() {
+        var result = $("#userid").val();
+        var password = $("#userpassid").val();
+        var auth = $("#auth").val();
+
+        if (result && password && auth) {
+            //console.log($('#actionform').serialize());
+            $.ajax({
+                url: "https://www.easy-mock.com/mock/5ac06d71a5bbc64b284023ec/ssg/login",
+                type: "POST",
+                dataType: "json",
+                async:false,
+                data: $('#actionform').serialize(),
+                success: function (json) {
+                    console.log(json);
+                    if (!json.data.valid.success) {
+                        if (json.data.valid.msg === "无此用户") {
+                            $("#userBox").addClass("has-error");
+                            $("#warnUser").text(json.data.valid.msg).show();
+                        }else if (json.data.valid.msg === "验证码错误") {
+                            $("#authBox").addClass("has-error");
+                            $("#warnAuth").text(json.data.valid.msg).show();
+                        }else if (json.data.valid.msg === "密码错误") {
+                            $("#pwdBox").addClass("has-error");
+                            $("#warnPwd").text(json.data.valid.msg).show();
+                        }else{
+                            //errorMsg
+                            $("#errorMsg").text(json.data.valid.msg).show();
+                        }
+                    } else {
+                        window.location.href = "./index.html";
+                    }
+                }
+            })
+        } else {
+            if (!result) {
+                $("#userBox").addClass("has-error");
+                $("#warnUser").text("用户名不能为空").show();
+            } else {
+                $("#userBox").removeClass("has-error");
+                $("#warnUser").hide();
+            }
+            if (!password) {
+                $("#pwdBox").addClass("has-error");
+                $("#warnPwd").text("密码不能为空").show();
+            } else {
+                $("#pwdBox").removeClass("has-error");
+                $("#warnPwd").hide();
+            }
+            if (!auth) {
+                $("#authBox").addClass("has-error");
+                $("#warnAuth").text("验证码不能为空").show();
+            } else {
+                $("#authBox").removeClass("has-error");
+                $("#warnAuth").hide();
+            }
+            return false
+        }
+    }
+</script>

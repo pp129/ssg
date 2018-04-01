@@ -1,0 +1,556 @@
+<style>
+    .labelInput {
+        border: 1px solid rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .icheckbox_line-blue, .iradio_line-blue {
+        display: inline-block;
+    }
+
+    .checkcontain {
+        display: inline-block;
+        float: left;
+        margin: 5px;
+    }
+
+    .icheckbox_line-blue .icheck_line-icon, .iradio_line-blue .icheck_line-icon {
+        background-position: 12px 0;
+    }
+</style>
+<!-- 整体视窗 start-->
+<div class="row" id="test" ng-controller="test" ng-init="init()">
+
+    <!-- 提示框  start-->
+    <toaster-container
+            toaster-options="{'position-class': 'toast-center-center', 'close-button':true}"></toaster-container>
+    <!-- 提示框 end -->
+
+    <!-- 响应式布局 start -->
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+
+        <!-- 带标题的内容区域 start -->
+        <div class="well">
+
+            <!-- 标题 start -->
+            <!-- <div class="header bordered-pink">帐号管理</div> -->
+            <!-- 标题 end -->
+
+            <!-- 条件选择区域 start -->
+            <div class="row" id="checkSection" style="padding-bottom: 0.5rem;">
+                <!-- 查询条件 -->
+                <div class="queryBox" ng-repeat="item in allData" ng-style="boxWidth('{{item}}')">
+                    <!-- 输入框 -->
+                    <div ng-if="!item.isdate && !item.iscombo && !item.istree">
+                        <label class="text col-sm-4 control-label">
+                            <span class="text labelText">{{item.cdesc}}</span>
+                        </label>
+                        <input type="text" class="input-sm col-sm-8 labelInput" placeholder="请输入查询条件"
+                               ng-model="item.filter">
+                    </div>
+                    <!-- 下拉 -->
+                    <div ng-if="item.iscombo">
+                        <label class="text col-sm-4 control-label">
+                            <span class="text labelText">{{item.cdesc}}</span>
+                        </label>
+                        <div class="col-sm-8 select-group-form">
+                            <select ng-model="item.filter" style="width: 100%" class="input-sm" title="">
+                                <option value=""></option>
+                                <option ng-repeat="x in querycombo[item.key]" value="{{ x.value }}">{{x.key}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- 日期范围 -->
+                    <div ng-if="item.isdate">
+                        <label class="text col-sm-4 control-label no-padding-left no-padding-right">
+                            <span class="text labelText">{{item.cdesc}}</span>
+                        </label>
+                        <div class="col-sm-8 select-group-form">
+                            <input date-range-picker id="rangeDate"
+                                   class="labelInput date-picker input-sm date-picker-input" type="text"
+                                   ng-model="item.dates" options="rangeoptions" clearable="true" title=""/>
+                            <!-- <i ng-show="item.dates.startDate||item.dates.endDate" class="fa fa-trash date-picker-clear" ng-click="item.dates = null"></i> -->
+                        </div>
+                    </div>
+                    <!-- 弹框+树 -->
+                    <div ng-if="item.istree">
+                        <label class="text col-sm-4 control-label no-padding-left no-padding-right">
+                            <span class="text labelText no-padding-left no-padding-right">{{item.cdesc}}</span>
+                        </label>
+                        <div class="col-sm-8 select-group-form">
+                            <div class="input-group">
+                                <input type="text" class="form-control input-sm" ng-model="parentid" disabled title="">
+                                <span class="input-group-btn">
+									<button type="button" data-toggle="modal" data-target="#searchModal"
+                                            class="btn btn-default">
+                                   		<span class="fa fa-search"></span>
+                                	</button>
+                 				</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="searchModal" class="modal fade" role="dialog" v>
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">执法单位 </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <multiselect-searchtree
+                                            multi-select="false"
+                                            filter-type="hidden"
+                                            data-input-model="searchStuff"
+                                            data-output-model="searchArr"
+                                            data-callback="SearchCallback(item, selectedItems)"
+                                            data-select-only-leafs="false">
+                                    </multiselect-searchtree>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default closeTree" data-dismiss="modal">确定
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 操作按钮区域 start -->
+                <div style="display:block;width:50%;float:left;margin-left:1rem" class="row" id="operSection">
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="query()">查询</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="clear()">取消</a>
+
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="add('add','userForm.html', 'lg')">新增</a>
+
+
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right:0.5rem"
+                       ng-click="edit()">修改</a>
+                    <input type="hidden" value="1" id="editPermit"/>
+
+
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="deleteList()">删除</a>
+
+
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="batchcancel()">恢复</a>
+
+                </div>
+                <!-- 操作按钮区域 end -->
+            </div>
+            <!-- 条件选择区域 end -->
+
+            <!-- 图表区域 start -->
+            <div class="row"
+                 style="padding-top: 10px; border-top: 3px solid rgb(87, 181, 227)"
+                 id="dataSection">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <table id="table" class="table table-condensed"
+                           data-filter-control='true'></table>
+                </div>
+            </div>
+            <!-- 图表区域 end -->
+            <script type="text/ng-template" id="userForm.html">
+                <form class="form-horizontal form-bordered bv-form" id="formid" name="myform" novalidate="novalidate"
+                      ng-submit="submit(myform.$valid,$event)">
+                    <div class="modal-header">
+                        <h3 class="modal-title">帐号管理</h3>
+                    </div>
+                    <div class="modal-body" id="Modal">
+
+                        <div class="form-group">
+                            <div ng-if="opentype=='add'" class="col-sm-6"
+                                 ng-class="{ 'has-error' : myform.usercode.$invalid && !myform.usercode.$pristine }">
+                                <label for="usercode" class="col-sm-2 control-label no-padding-right">用户名</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="usercode" ng-model="formData.usercode"
+                                           id="usercode" required title="">
+                                    <span class="help-block"
+                                          ng-show="myform.usercode.$invalid && !myform.usercode.$pristine">用户名不能为空</span>
+                                </div>
+                            </div>
+                            <div ng-if="opentype=='update'" class="col-sm-6"
+                                 ng-class="{ 'has-error' : myform.usercode.$invalid && !myform.usercode.$pristine }">
+                                <label for="usercode" class="col-sm-2 control-label no-padding-right">用户名</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="usercode" ng-model="formData.usercode"
+                                           required disabled title="">
+                                    <span class="help-block"
+                                          ng-show="myform.usercode.$invalid && !myform.usercode.$pristine">用户名不能为空</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6"
+                                 ng-class="{ 'has-error' : myform.username.$invalid && !myform.username.$pristine }">
+                                <label for="username" class="col-sm-2 control-label no-padding-right">姓名</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="username" ng-model="formData.username"
+                                           id="username" required title=""/>
+                                    <span class="help-block"
+                                          ng-show="myform.username.$invalid && !myform.username.$pristine">姓名不能为空</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-if="opentype=='add'">
+                            <div class="col-sm-6"
+                                 ng-class="{ 'has-error' : myform.password.$invalid && !myform.password.$pristine }">
+                                <label for="password" class="col-sm-2 control-label no-padding-right">输入密码</label>
+                                <div class="col-sm-8" style="padding: 0 15px">
+                                    <div class="input-group">
+                                        <input type="password" class="form-control" placeholder="初始密码为123456"
+                                               id="password"
+                                               ng-model="formData.password" name="password" ng-minlength="6" required/>
+                                        <span class="input-group-btn">
+                                    		<a class="btn btn-default" ng-click="initPwd()">初始化</a>
+                                		</span>
+                                    </div>
+                                    <span class="help-block"
+                                          ng-show="myform.password.$invalid && !myform.password.$pristine">密码不能为空且长度不小于6位数</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6" id="confirmPwdBox"
+                                 ng-class="{ 'has-error' : myform.confirmpwd.$invalid && !myform.confirmpwd.$pristine }">
+                                <label for="confirmpwd" class="col-sm-2 control-label no-padding-right">再次输入密码</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="confirmpwd" name="confirmpwd"
+                                           required pw-check="password" ng-model="formData.confirmPwd">
+                                    <span id="wrong" class="help-block"
+                                          ng-show="myform.confirmpwd.$invalid && !myform.confirmpwd.$pristine">密码不一致</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-if="opentype=='update'">
+                            <div class="col-sm-6"
+                                 ng-class="{ 'has-error' : myform.password.$invalid && !myform.password.$pristine }">
+                                <label for="password" class="col-sm-2 control-label no-padding-right">原密码</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="oldpwd" ng-model="formData.password"
+                                           name="password" ng-minlength="6" title="">
+                                    <span class="help-block"
+                                          ng-show="myform.password.$invalid && !myform.password.$pristine">密码不能为空且长度不小于6位数</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6"
+                                 ng-class="{ 'has-error' : myform.newpassword.$invalid && !myform.newpassword.$pristine }">
+                                <label for="newpassword" class="col-sm-2 control-label no-padding-right">输入新密码</label>
+                                <div class="col-sm-8" style="padding: 0 15px">
+                                    <div class="input-group">
+                                        <input type="password" placeholder="初始密码为123456" id="newpassword"
+                                               class="form-control" ng-model="formData.newpassword" name="newpassword"
+                                               ng-minlength="6">
+                                        <span class="input-group-btn">
+                                    		<a class="btn btn-default" ng-click="initNewPwd()">初始化</a>
+                                		</span>
+                                    </div>
+                                    <span class="help-block"
+                                          ng-show="myform.newpassword.$invalid && !myform.newpassword.$pristine">密码不能为空且长度不小于6位数</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6"></div>
+                            <div class="col-sm-6" id="confirmPwdBox2"
+                                 ng-class="{ 'has-error' : myform.confirmpwd.$invalid && !myform.confirmpwd.$pristine }"
+                                 style="padding-top:1rem">
+                                <label for="confirmpwd2" class="col-sm-2 control-label no-padding-right">再次输入密码</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="confirmpwd2" name="confirmpwd"
+                                           pw-check="newpassword" ng-model="formData.confirmPwd">
+                                    <span class="help-block"
+                                          ng-show="myform.confirmpwd.$invalid && !myform.confirmpwd.$pristine">密码不一致</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <label for="cancelflag" class="col-sm-2 control-label no-padding-right">有效否</label>
+                                <div class="col-sm-8 select-group-form" style="padding: 0 15px">
+                                    <select ng-model="formData.cancelflag" style="width: 100%" id="cancelflag" title="">
+                                        <option ng-repeat="x in combo.cancelflag" value="{{ x.value }}"
+                                                ng-selected="formData.cancelflag == x.value">{{x.key}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+
+                                <label for="parentid"
+                                       class="col-sm-2 control-label no-padding-right">机构</label>
+                                <div class="col-sm-8" style="padding: 0 15px">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="groupid" ng-model="groupid"
+                                               id="parentid" disabled title="">
+                                        <span class="input-group-btn">
+                                    			<a class="btn btn-default fa fa-search" data-toggle="modal"
+                                                   data-target="#TreeModal"></a>
+                                			</span>
+                                    </div>
+                                </div>
+
+                                <div id="TreeModal" class="modal fade" role="dialog" v>
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;
+                                                </button>
+                                                <h4 class="modal-title">机构</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <multiselect-searchtree
+                                                        multi-select="false"
+                                                        filter-type="hidden"
+                                                        data-input-model="stuff"
+                                                        data-output-model="checkfunsArr"
+                                                        data-select-only-leafs="false">
+                                                </multiselect-searchtree>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default closeTree"
+                                                        data-dismiss="modal" ng-click="CustomCallback()">确定
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6">
+                                <label for="phone" class="col-sm-2 control-label no-padding-right">电话</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="phone" ng-model="formData.phone" class="form-control"
+                                           id="phone" title="">
+                                </div>
+                            </div>
+                            <div class="col-sm-6 form-group"
+                                 ng-class="{ 'has-error' : myform.email.$invalid && !myform.email.$pristine }">
+                                <label for="email" class="col-sm-2 control-label no-padding-right">邮箱</label>
+                                <div class="col-sm-8">
+                                    <input type="email" name="email" ng-model="formData.email" class="form-control"
+                                           id="email" title=""
+                                           ng-pattern="/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/">
+                                    <span ng-show="myform.email.$invalid && !myform.email.$pristine" class="help-block">邮箱格式有误</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-if="opentype=='update'">
+                            <div class="col-sm-6">
+                                <label for="loginip" class="col-sm-2 control-label no-padding-right">最后登录IP</label>
+                                <div class="col-sm-8" style="line-height:30px" id="loginip">
+                                    {{formData['loginip']}}
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="logintime" class="col-sm-2 control-label no-padding-right no-padding-left">最后登录时间</label>
+                                <div class="col-sm-8" style="line-height:30px" id="logintime">
+                                    {{logintime}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label no-padding-right">角色分配</label>
+                            <div class="col-sm-11" style="line-height:30px">
+                                <a href="javascript:void(0);" ng-click="rolesCtrl('','rolesCtrl.html', 'lg')">
+                                    <span ng-repeat="role in formData.roles"
+                                          style="margin-left: 5px;">{{role.rolename}}</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="modal-footer">
+                            <button class="btn btn-lg btn-palegreen" type="submit">确定</button>
+
+                            <a class="btn btn-lg btn-warning" ng-click="cancel()">取消</a>
+                        </div>
+                    </div>
+                </form>
+            </script>
+            <script type="text/ng-template" id="rolesCtrl.html">
+                <form class="form-horizontal form-bordered bv-form" id="formrole" name="myform" novalidate="novalidate"
+                      ng-submit="submit(myform.$valid,$event)">
+                    <div class="modal-header">
+                        <h3 class="modal-title">角色管理</h3>
+                    </div>
+                    <div class="modal-body" id="Modalrole" style="overflow: hidden;">
+                        <div ng-repeat="role in roles track by $index" class="checkcontain">
+                            <input i-check type="checkbox" name="{{role.rolename}}"
+                                   skin="line" ng-model="role.checked"
+                                   color="blue" title="">
+                            <label ng-bind="role.rolename"></label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="modal-footer">
+                            <button class="btn btn-lg btn-palegreen" type="submit">确定</button>
+                            <a class="btn btn-lg btn-warning" ng-click="cancel()">取消</a>
+                        </div>
+                    </div>
+                </form>
+            </script>
+
+            <script type="text/ng-template" id="confirm.html">
+                <div class="modal-header">
+                    <i class="fa fa-warning"></i>
+                </div>
+                <div class="modal-title">确认删除</div>
+
+                <div class="modal-body">是否确认删除？</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" ng-click="ok()">确定</button>
+                    <button type="button" class="btn btn-warning" ng-click="cancel()">取消</button>
+                </div>
+            </script>
+        </div>
+        <!-- 带标题的内容区域 end -->
+
+    </div>
+    <!-- 响应式布局 end -->
+
+</div>
+<!-- 整体视窗 end-->
+
+<!-- dashboard -->
+<link rel="stylesheet" href="/static/js/hover/hover.css">
+<style>
+    .dd2-content {
+        cursor: pointer;
+    }
+</style>
+<div ng-controller="DashboardCtrl" ng-init="loadData()">
+    <!-- 提示框  start-->
+    <toaster-container toaster-options="{'position-class': 'toast-top', 'close-button':true}"></toaster-container>
+    <!-- 提示框 end -->
+
+    <div class="row">
+        <!--<div class="col-lg-12 col-sm-12 col-xs-12">
+            <div class="widget">
+                <div class="widget-header">
+                    <span class="widget-caption"></span>
+                </div>
+                <div class="widget-body">
+                    &lt;!&ndash;<div class="dd dd-draghandle darker">
+
+                        <ol class="dd-list">
+                            <li class="dd-item dd2-item" data-id="15" ng-repeat="item in menu">
+                                &lt;!&ndash; 一级 &ndash;&gt;
+                                <div class="dd-handle dd2-handle">
+                                    <i class="normal-icon fa fa-{{item.iconcls}} "></i>
+
+                                    <i class="drag-icon fa fa-arrows-alt "></i>
+                                </div>
+                                <div class="dd2-content">{{item.funname}}</div>
+                                &lt;!&ndash; 一级 &ndash;&gt;
+                                &lt;!&ndash; 二级 &ndash;&gt;
+                                <ol class="dd-list" style="" ng-if="item.childList.length>0">
+                                    <li class="dd-item dd2-item" data-id="18" ng-repeat="sub in item.childList">
+                                        <div class="dd-handle dd2-handle">
+                                        </div>
+                                        <div class="dd2-content" ng-click="go('app.{{sub.funcode}}')">{{sub.funname}}
+                                        </div>
+                                    </li>
+                                </ol>
+                                &lt;!&ndash; 二级 &ndash;&gt;
+                            </li>
+                        </ol>
+
+                    </div>&ndash;&gt;
+                </div>
+            </div>
+        </div>-->
+        <div class="col-sm-12" ng-repeat="item in menu" ng-if="item.funcode!='dashboard'">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-themesecondary">
+                    <i class="widget-icon fa fa-{{item.iconcls}} themesecondary"></i>
+                    <span class="widget-caption themesecondary">{{item.funname}}</span>
+                </div><!--Widget Header-->
+                <div class="widget-body  no-padding">
+                    <div class="tickets-container" style="overflow: auto">
+                        <div class="col-lg-3 col-sm-6 col-xs-12" ng-if="item.childList.length>0"
+                             ng-repeat="sub in item.childList">
+                            <div class="databox databox-lg databox-inverted radius-bordered databox-shadowed databox-graded databox-vertical"
+                                 ng-click="go('app.{{sub.funcode}}')">
+                                <div class="databox-top icon-top bg-info no-padding">
+                                    <div class="databox-icon">
+                                        <i class="fa fa-file"></i>
+                                    </div>
+                                </div>
+                                <div class="databox-bottom no-padding bordered-thick bordered-blue">
+                                    <div class="databox-row">
+                                        <div class="databox-cell cell-12 no-padding text-align-center bordered-right bordered-platinum">
+                                            <span class="databox-number databox-number-min lightcarbon no-margin">{{sub.funname}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="well enable">
+                <div class="content">
+                    <ul class="ca-menu row">
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon"><i class="fa fa-home"></i></span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">Personalized to your needs</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon">H</span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">Advanced use of technology</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon">N</span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">Understanding visually</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon">K</span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">Professionals in action</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon">L</span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">24/7 for you needs</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon">L</span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">24/7 for you needs</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon">L</span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">24/7 for you needs</h4>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div><!-- content -->
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="/static/js/app/controllers/test.js"></script>

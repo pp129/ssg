@@ -1,0 +1,89 @@
+<link rel="stylesheet" href="../static/js/hover/hover.css">
+<style>
+    .widget {
+        margin: 0 0 15px 0;
+    }
+</style>
+<div ng-controller="DashboardCtrl" ng-init="loadData()">
+    <!-- 提示框  start-->
+    <toaster-container toaster-options="{'position-class': 'toast-top', 'close-button':true}"></toaster-container>
+    <!-- 提示框 end -->
+
+    <div class="row">
+        <div class="col-sm-12" ng-repeat="item in menu">
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-themesecondary">
+                    <i class="widget-icon fa fa-{{item.iconcls}} themesecondary"></i>
+                    <span class="widget-caption themesecondary">{{item.funname}}</span>
+                </div><!--Widget Header-->
+                <div class="widget-body  no-padding">
+                    <div class="tickets-container" style="overflow: auto">
+                        <div class="col-sm-12 enable">
+                            <div class="content">
+                                <ul class="ca-menu row">
+                                    <li class="col-sm-6" ng-repeat="sub in item.childList"
+                                        ng-if="!sub.gosub && sub.isrole==true" ng-click="go(sub)">
+                                        <a href="#">
+                                            <span class="ca-icon">
+                                                <i ng-if="sub['iconcls']" class="fa fa-{{sub['iconcls']}}"></i>
+                                                <i ng-if="!sub['iconcls']" class="fa fa-file-text"></i>
+                                            </span>
+                                            <div class="ca-content">
+                                                <h4 class="ca-sub">{{sub.funname}}</h4>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="col-sm-6" ng-repeat="sub in item.childList"
+                                        ng-if="sub.gosub && sub.isrole==true" ng-click="gosub(sub)">
+                                        <a href="#">
+                                            <span class="ca-icon">
+                                                <i ng-if="sub['iconcls']" class="fa fa-{{sub['iconcls']}}"></i>
+                                                <i ng-if="!sub['iconcls']" class="fa fa-file-text"></i>
+                                            </span>
+                                            <div class="ca-content">
+                                                <h4 class="ca-sub">{{sub.funname}}</h4>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div><!-- content -->
+                        </div>
+                        <div class="col-sm-12 unable">
+                            <div class="content">
+                                <ul class="ca-menu row">
+                                    <li class="col-sm-6" ng-repeat="sub in item.childList"
+                                        ng-if="!sub.gosub && sub.isrole==false" ng-click="go(sub)">
+                                        <a href="#">
+                                            <span class="ca-icon">
+                                                <i ng-if="sub['iconcls']" class="fa fa-{{sub['iconcls']}}"></i>
+                                                <i ng-if="!sub['iconcls']" class="fa fa-ban"></i>
+                                            </span>
+                                            <div class="ca-content">
+                                                <h4 class="ca-sub">{{sub.funname}}</h4>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="col-sm-6" ng-repeat="sub in item.childList"
+                                        ng-if="sub.gosub && sub.isrole==false" ng-click="gosub(sub)">
+                                        <a href="#">
+                                            <span class="ca-icon">
+                                                <i ng-if="sub['iconcls']" class="fa fa-{{sub['iconcls']}}"></i>
+                                                <i ng-if="!sub['iconcls']" class="fa fa-ban"></i>
+                                            </span>
+                                            <div class="ca-content">
+                                                <h4 class="ca-sub">{{sub.funname}}</h4>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div><!-- content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="../static/js/app/controllers/dashboard.js"></script>

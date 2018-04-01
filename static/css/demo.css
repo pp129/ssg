@@ -1,0 +1,539 @@
+/*#region FontAwesome Page*/
+.fontawesome-icon-list {
+  margin: 22px 0 0 0 !important;
+}
+.fontawesome-icon-list .fa-hover {
+  color: #262626;
+  display: block;
+  height: 36px;
+  line-height: 32px;
+  padding-left: 10px;
+  padding: 2px 0;
+}
+.fontawesome-icon-list .fa-hover .fa {
+  display: inline-block;
+  font-size: 14px;
+  margin-right: 10px;
+  text-align: right;
+  width: 32px;
+}
+.fontawesome-icon-list .fa-hover:hover {
+  background-color: #eeeeee;
+  color: #000000;
+  text-decoration: none;
+}
+.fontawesome-icon-list .fa-hover:hover .fa {
+  font-size: 28px;
+  vertical-align: -6px;
+}
+/*#endregion FontAwesome Page*/
+/*#region GlyphIcon Page*/
+.bs-glyphicons {
+  overflow: hidden;
+}
+.bs-glyphicons li {
+  float: left;
+  width: 25%;
+  height: 115px;
+  padding: 10px;
+  font-size: 10px;
+  line-height: 1.4;
+  text-align: center;
+  border: 1px solid #ffffff;
+  background-color: #f9f9f9;
+}
+.bs-glyphicons li:hover {
+  color: #ffffff;
+  background-color: #e46f61;
+}
+.bs-glyphicons .glyphicon {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+.bs-glyphicons .glyphicon-class {
+  display: block;
+  text-align: center;
+  word-wrap: break-word;
+}
+.bs-glyphicons-list {
+  padding-left: 0;
+  list-style: none;
+}
+@media (min-width: 768px) {
+  .bs-glyphicons {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .bs-glyphicons li {
+    width: 12.5%;
+    font-size: 12px;
+  }
+}
+/*#endregion GlyphIcon Page*/
+/*#region Weather Page*/
+.weathericons {
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+.weathericons:hover {
+  background-color: #a0d468;
+  color: #ffffff;
+}
+.weathericons .icon,
+.weathericons .class {
+  display: inline-block;
+}
+.weathericons .icon {
+  margin-right: 5px;
+  font-size: 24px;
+}
+/*#endregion Weather Page*/
+/*#region Typicon Page*/
+#typicon-preview {
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+}
+#typicon-preview .icon {
+  float: left;
+  padding: 6px;
+  display: inline-block;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-border-radius: 6px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 6px;
+  -moz-background-clip: padding;
+  border-radius: 6px;
+  background-clip: padding-box;
+  color: #444444;
+}
+#typicon-preview .icon .typcn:before {
+  font-size: 24px;
+}
+#typicon-preview .icon:hover {
+  background-color: #ffce55;
+  line-height: 38px;
+  color: #ffffff;
+}
+#typicon-preview .icon:hover .typcn:before {
+  font-size: 32px;
+}
+/*#endregion Typicon Page*/
+/*#region ChartJS*/
+.chartcontainer {
+  width: 100%;
+  text-align: center;
+}
+/*#endregion ChartJS*/
+/*#region Easy Pie Charts*/
+.easy-pie-chart-preview .well {
+  width: 100%;
+  height: 250px;
+  text-align: center;
+  position: relative;
+  padding-top: 50px;
+}
+.easy-pie-chart-preview .well .easyPieChart {
+  margin: 0 auto;
+}
+/*#endregion Easy Pie Charts*/
+/*#region Sparkline Charts*/
+.sparkline-preview .well {
+  text-align: center;
+  position: relative;
+}
+/*#endregion Sparkline Charts*/
+/*#region Buttons*/
+.buttons-preview .btn,
+.buttons-preview .btn-group {
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+/*#endregion Buttons*/
+/*#region Basic Elemets*/
+.dropdown-container {
+  margin: 0 auto;
+  text-align: center;
+}
+.dropdown-container .dropdown-preview {
+  display: inline-block;
+  text-align: left;
+}
+.dropdown-container .dropdown-preview > .dropdown-menu {
+  display: block;
+  position: static;
+  margin-bottom: 5px;
+}
+#dropdownbuttons .btn {
+  margin-top: 10px;
+}
+.labels-container .label {
+  margin: 0 10px 10px 0;
+}
+/*#endregion Basic Elemets*/
+/*#region Alerts*/
+.popover-container {
+  overflow: auto;
+}
+.popoverexample .popover {
+  position: relative;
+  display: block;
+  width: 260px;
+  margin: 20px;
+}
+/*#endregion Alerts*/
+/*#region Modals & Wells*/
+.modal-preview .modal {
+  position: relative;
+  top: auto;
+  right: auto;
+  left: auto;
+  bottom: auto;
+  z-index: 1;
+  display: block;
+  width: auto;
+  overflow: hidden;
+  max-width: 630px;
+}
+.modal-preview .modal .modal-dialog {
+  width: 90%;
+}
+.bordered-well-container .well {
+  margin-bottom: 0px;
+}
+/*#endregion Modals & Wells*/
+/*#region Knob*/
+.knob-container {
+  text-align: center;
+}
+/*#endregion Knob*/
+/*#region noUiSlider*/
+#red,
+#green,
+#blue {
+  margin: 10px;
+  display: inline-block;
+  height: 200px;
+}
+#colorpicker {
+  height: 240px;
+  width: 100%;
+  margin: 20px auto;
+  padding: 10px;
+  border: 1px solid #BFBFBF;
+}
+#colorpicker .result {
+  margin: 60px 30px;
+  height: 100px;
+  width: 100px;
+  display: inline-block;
+  vertical-align: top;
+  color: #7f7f7f;
+  background: #7f7f7f;
+  border: 1px solid #fff;
+  box-shadow: 0 0 10px;
+}
+#colors .colored-slider {
+  margin-bottom: 20px;
+}
+#sizes .sized-slider {
+  margin-bottom: 20px;
+}
+/*#endregion noUiSlider*/
+/*#region Grid Page*/
+.grid-example .row {
+  margin-bottom: 15px;
+  padding: 0 15px;
+}
+.grid-example .row [class^=col-] {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+}
+/*#endregion Grid Page*/
+
+/*customer*/
+.screen-sm {overflow:auto;}
+.form-group{    margin-bottom: 10px;}
+.queryBox{width: 260px;display:block;float:left;margin-right: 1rem;}
+.queryBox label{
+	line-height: 30px;
+	text-align: center;
+}
+.date-picker-input{width:100%;position:relative;}
+.date-picker-clear{position:absolute;right:0.6rem;top:9px;color:#666;cursor:pointer;}
+.inChild{padding-left:40px !important}
+@media (min-width: 992px){
+	.modal-lg {
+	    width: 1100px;
+	}
+}
+.tree-checkbox{
+	opacity: 1 !important;
+	position:static !important;
+}
+#authCode:hover{cursor:pointer;}
+.tablePane {
+  padding: 2px 0 0 0;
+}
+#voyage {
+  float: right;
+}
+#sysMask{
+	display:none;
+	position: absolute;
+    width: 100%;
+    top: 10%;
+    left: 50%;
+    margin-left: -55rem;
+}
+#sysquery{margin-left:0.5rem;}
+.rtgap{margin-right:0.5rem;}
+#sysCtrl input[type=checkbox], #sysCtrl input[type=radio] {
+    opacity: 1;
+    position: static;
+}
+#personCtrl input[type=checkbox], #sysCtrl input[type=radio] {
+    opacity: 1;
+    position: static;
+}
+#userCtrl input[type=checkbox], #sysCtrl input[type=radio] {
+	opacity: 1;
+    position: static;
+}
+#userCtrl input[type=radio] {
+	vertical-align:bottom;
+}
+#table input[type=checkbox], #table input[type=radio] {
+	opacity: 1;
+    position: static;
+}
+#tableDetail input[type=checkbox], #tableDetail input[type=radio] {
+	opacity: 1;
+    position: static;
+}
+#commonQuery .dropdown-menu input[type=checkbox] {
+	opacity: 1;
+    position: static;
+}
+.ivh-treeview-checkbox {
+	opacity: 1 !important;
+    position: static !important;
+}
+.navTabs{display:none;}
+#navTabTitle{
+	margin: 0.5rem 4px;
+	line-height: 0;
+}
+#navTabTitle .navBtn{
+	line-height:22px;
+	/* margin-right:0.5rem; */
+	padding-right:1.8rem;
+}
+.closeLabel{
+	font-weight:bold;
+	position:relative;
+	top:1px;
+	right:17px;
+	cursor:pointer;
+	opacity: 0.6;
+}
+.closeLabel:hover{
+	opacity: 1;
+	color:#000;
+}
+#navTabTitle .navBtn span{margin-left:0.5rem}
+.hoverTr:hover{
+	cursor:pointer;
+}
+table .th-inner {line-height: 16px !important;}
+#table tbody tr:hover{
+	cursor:pointer;
+}
+.searchBox{
+	line-height: 2.4rem;
+    vertical-align: middle;
+    padding:0 12px;
+}
+.fixed-table-pagination .pagination-detail, .fixed-table-pagination div.pagination{
+	padding:0 1rem;
+}
+button[name]{
+	padding:8px;
+}
+button[name] i{
+	margin-left:5px;
+}
+.fadeBoard{
+	display:none;
+	position:absolute;
+	width:100%;
+	height:100%;
+	background:#fff;
+	opacity:0.75;
+	z-index:1000;
+}
+.modal-preview{
+	position: absolute;
+    top: 34px;
+    left: 50%;
+    margin-left: -250px;
+    width: 1000px;
+}
+.modal-preview .modal{
+	min-height:630px;
+}
+#formMask{
+	display:none;
+	z-index:1040;
+	top:28px;
+	left:45%;
+}
+#memberMask{
+	display:none;
+	z-index:1050;
+	min-height: 800px;
+	left:40%;
+}
+#memberMask .modal {
+  max-width: 900px;
+}
+#selectMember i{
+	margin-left:4px;
+}
+#commonQuery .well.with-header {
+    padding-top: 50px;
+}
+.checkbox, .radio {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+#throughputModal li{list-style:none}
+.checkbox .text{line-height:28px}
+.checkLabel{width:100%}
+.labelText{padding-top:0.5rem;}
+.checkLabel .labelInput{float:left}
+.labelSelect{top: -5px;
+    padding-left: 0;
+    padding-right: 0;
+}
+.labelSelect>div>span{
+	height: 30px;
+}
+.planitems{
+	margin-right:0.5rem
+}
+.select-group-form{
+	padding-right: 0;
+	padding-left: 0;
+}
+.select-group-form .labelSelect{
+	width:-moz-calc(100% - 43px); 
+	width:-webkit-calc(100% - 43px); 
+	width: calc(100% - 43px);
+    float: left;
+    text-align:center;
+}
+
+.select-group-form .input-group-btn button{
+	float: left;
+    height: 30px;
+}
+.bottom-border{
+	border-bottom:2px solid #e75b8d;
+    width: 100%;
+    float: left;
+    padding-top: 0.8rem;
+}
+.inlinebox{display:inline-block;vertical-align: middle;}
+#planTable tbody tr{
+	cursor:pointer
+}
+.selectedRow{
+	background-color: #f5f5f5;
+}
+.databox{min-width:109px !important}
+.databox-right p {
+  font-size: 18px;
+  line-height: 3.4rem;
+  text-align: center;
+}
+.item-price {
+  text-align: left;
+}
+.databox-icon i {
+  margin-top: 30px !important;
+}
+.item-price{margin:7px auto !important}
+.item-time{margin:7px auto !important}
+@media (max-width: 1366px){
+	.databox  {
+	    height: 80px !important;
+	    min-width: 63px !important;
+	}
+	.databox .largelabel{height:80px !important;}
+	.databox .databox-top{
+		height:30px !important;
+	}
+	.databox-right p{
+		font-size: 24px !important;
+	}
+	.databox-right .dbline{line-height: 2.5rem !important;}
+	.databox-right .sglline{line-height: 5.5rem !important;}
+	.databox .databox-bottom{
+		height:50px !important;
+	}
+	.databox .largetitle{
+		margin-top:6px !important;
+		width: 60%;
+		display: inline-block;
+	}
+	.databox .midtitle{
+		font-size: 15px !important;
+		margin:0 !important;
+    	line-height: 25px;
+	}
+	.databox .icon-top{
+		height:50px !important;
+	}
+	.databox-icon i {
+	    margin-top: 8px !important;
+	}
+	.databox .databox-number{
+		margin:0 !important;
+		margin-top:7px !important;
+	}
+	.databox .databox-number-min{
+		font-size: 14px !important;
+		margin:0 !important;
+		line-height: 24px !important;
+	}
+	.orders-container .orders-header{
+		height: 30px !important;
+		padding: 1px 0 !important;
+	}
+	.orders-container .orders-list .order-item{padding: 0px 10px !important;}
+	.orders-container .orders-list .alertitem{
+		padding: 0px 0px !important;
+	}
+	.orders-container .orders-footer{height: 30px !important;}
+	.orders-header h4{
+		margin:5px 0 !important;
+	}
+	.order-item .row .item-booker{
+		text-overflow: ellipsis;
+	    overflow: hidden;
+	    white-space: nowrap;
+	}
+	.order-item .row .item-price{
+		text-overflow: ellipsis;
+	    overflow: hidden;
+	    white-space: nowrap;
+	}
+}

@@ -1,0 +1,141 @@
+<!-- 整体视窗 start-->
+<div class="row" id="funInfo" ng-controller="funInfo" ng-init="init()">
+
+    <!-- 提示框  start-->
+    <toaster-container
+            toaster-options="{'position-class': 'toast-center-center', 'close-button':true}"></toaster-container>
+    <!-- 提示框 end -->
+
+    <!-- 响应式布局 start -->
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+
+        <!-- 带标题的内容区域 start -->
+        <div class="well">
+
+            <!-- 标题 start -->
+            <!-- <div class="header bordered-pink">菜单管理</div> -->
+            <!-- 标题 end -->
+
+            <!-- 条件选择区域 start -->
+            <div class="row" id="checkSection">
+                <div class="queryBox" ng-repeat="item in allData">
+                    <!-- 查询条件 -->
+                    <label class="text col-sm-5 control-label">
+                        <span class="text labelText">{{item.cdesc}}</span>
+                    </label>
+                    <input type="text" class="input-sm col-sm-7 labelInput" placeholder="请输入查询条件"
+                           ng-model="item.filter">
+                </div>
+                <!-- 操作按钮区域 start -->
+                <div style="display:block;float:left;margin-left:1rem;margin-bottom:0.5rem" class="row" id="operSection">
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="query()">查询</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="clear()">取消</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="add('add','funForm.html', 'lg')">新增</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right:0.5rem"
+                       ng-click="edit()">修改</a>
+                    <input type="hidden" value="1" id="editPermit"/>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="deleteList()">删除</a>
+                </div>
+                <!-- 操作按钮区域 end -->
+            </div>
+            <!-- 条件选择区域 end -->
+            <!-- 图表区域 start -->
+            <div class="row"
+                 style="padding-top: 10px; border-top: 3px solid rgb(87, 181, 227)"
+                 id="dataSection">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <table id="table" class="table table-condensed"
+                           data-filter-control='true'></table>
+                </div>
+            </div>
+            <!-- 图表区域 end -->
+
+            <script type="text/ng-template" id="funForm.html">
+                <form class="form-horizontal form-bordered bv-form" id="formid" name="myform" novalidate="novalidate"
+                      ng-submit="submit(myform.$valid,$event)">
+                    <div class="modal-header">
+                        <h3 class="modal-title">集装箱尺寸管理</h3>
+                    </div>
+                    <div class="modal-body" id="Modal">
+                        <div class="form-group">
+                            <div class="col-sm-6"
+                                 ng-class="{ 'has-error' : myform.consize.$invalid && !myform.consize.$pristine }">
+                                <label for="consize"
+                                       class="col-sm-2 control-label no-padding-right">尺寸</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" name="consize" placeholder="尺寸" ng-disabled="disabled"
+                                           ng-model="formData.consize" required id="consize" ng-pattern="/^\d{2}$/"/>
+                                    <div class="help-block" ng-messages="myform.consize.$error"
+                                         ng-show="myform.consize.$error && myform.consize.$touched">
+                                        <p ng-message="pattern">只能输入2位的数字</p>
+                                        <p ng-message="required">尺寸不能为空</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6"
+                                 ng-class="{ 'has-error' : myform.teu.$invalid && !myform.teu.$pristine }">
+                                <label for="teu"
+                                       class="col-sm-2 control-label no-padding-right">teu</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" name="teu" placeholder="teu"
+                                           ng-model="formData.teu" required id="teu" int-float-ten-two/>
+                                    <div class="help-block" ng-messages="myform.teu.$error"
+                                         ng-show="myform.teu.$error && myform.teu.$touched">
+                                        <p ng-message="intFloatTenTwo">请输入1-10位且小数点后不超过2位的数字</p>
+                                        <p ng-message="required">teu不能为空</p>
+                                    </div>
+                                    <!--<span class="help-block"
+                                          ng-show="myform.funname.$invalid && !myform.funname.$pristine">teu不能为空</span>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6"
+                                 ng-class="{ 'has-error' : myform.kgs.$invalid && !myform.kgs.$pristine }">
+                                <label for="kgs"
+                                       class="col-sm-2 control-label no-padding-right">量箱标准重量</label>
+                                <div class="col-sm-8">
+                                    <input type="number" class="form-control" name="kgs" placeholder="量箱标准重量"
+                                           ng-model="formData.kgs" required id="kgs" int-float-fifteen-six/>
+                                    <div class="help-block" ng-messages="myform.kgs.$error"
+                                         ng-show="myform.kgs.$error && myform.kgs.$touched">
+                                        <p ng-message="intFloatFifteenSix">请输入1-15位且小数点后不超过6位的数字</p>
+                                        <p ng-message="required">量箱标准重量不能为空</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-lg btn-palegreen" type="submit">确定</button>
+
+                        <a class="btn btn-lg btn-warning" ng-click="cancel()">取消</a>
+                    </div>
+                </form>
+            </script>
+            <script type="text/ng-template" id="confirm.html">
+                <div class="modal-header">
+                    <i class="fa fa-warning"></i>
+                </div>
+                <div class="modal-title">确认删除</div>
+
+                <div class="modal-body">是否确认删除？</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" ng-click="ok()">确定</button>
+                    <button type="button" class="btn btn-warning" ng-click="cancel()">取消</button>
+                </div>
+            </script>
+        </div>
+        <!-- 带标题的内容区域 end -->
+
+    </div>
+    <!-- 响应式布局 end -->
+
+</div>
+<!-- 整体视窗 end-->
+
+<script src="../static/js/app/controllers/consize.js"></script>

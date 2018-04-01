@@ -1,0 +1,130 @@
+<!-- 整体视窗 start-->
+<div class="row" id="area" ng-controller="area" ng-init="init()">
+
+    <!-- 提示框  start-->
+    <toaster-container
+            toaster-options="{'position-class': 'toast-center-center', 'close-button':true}"></toaster-container>
+    <!-- 提示框 end -->
+
+    <!-- 响应式布局 start -->
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+
+        <!-- 带标题的内容区域 start -->
+        <div class="well">
+
+            <!-- 标题 start -->
+            <!-- <div class="header bordered-pink">菜单管理</div> -->
+            <!-- 标题 end -->
+
+            <!-- 条件选择区域 start -->
+            <div class="row" id="checkSection">
+                <div class="queryBox" ng-repeat="item in allData">
+                    <!-- 查询条件 -->
+                    <label class="text col-sm-4 control-label">
+                        <span class="text labelText">{{item.cdesc}}</span>
+                    </label>
+                    <input type="text" class="input-sm col-sm-8 labelInput" placeholder="请输入查询条件"
+                           ng-model="item.filter">
+                </div>
+                <!-- 操作按钮区域 start -->
+                <div style="display:block;float:left;margin-left:1rem;margin-bottom:0.5rem" class="row" id="operSection">
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="query()">查询</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="clear()">取消</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="add('add','funForm.html', 'lg')">新增</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right:0.5rem"
+                       ng-click="edit()">修改</a>
+                    <input type="hidden" value="1" id="editPermit"/>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="deleteList()">删除</a>
+                </div>
+                <!-- 操作按钮区域 end -->
+            </div>
+            <!-- 条件选择区域 end -->
+            <!-- 图表区域 start -->
+            <div class="row"
+                 style="padding-top: 10px; border-top: 3px solid rgb(87, 181, 227)"
+                 id="dataSection">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <table id="table" class="table table-condensed"
+                           data-filter-control='true'></table>
+                </div>
+            </div>
+            <!-- 图表区域 end -->
+
+            <script type="text/ng-template" id="funForm.html">
+                <form class="form-horizontal form-bordered bv-form" id="formid" name="myform" novalidate="novalidate"
+                      ng-submit="submit(myform.$valid,$event)">
+                    <div class="modal-header">
+                        <h3 class="modal-title">区域管理</h3>
+                    </div>
+                    <div class="modal-body" id="Modal">
+                        <div class="form-group">
+							<div class="col-sm-6" ng-class="{ 'has-error' : myform.areano.$invalid }">
+								<label for="areano" class="col-sm-2 control-label no-padding-right">区域代码</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" name="areano" placeholder="区域代码" ng-model="formData.areano" required id="areano"/>
+									<span class="help-block" ng-show="myform.areano.$invalid">区域代码不能为空</span>
+								</div>
+							</div>
+			    			<div class="col-sm-6" ng-class="{ 'has-error' : myform.areacn.$invalid }">
+								<label for="areacn" class="col-sm-2 control-label no-padding-right">区域名称</label>
+                              	<div class="col-sm-8">
+                                  <input type="text" class="form-control" name="areacn" placeholder="区域名称" ng-model="formData.areacn" required id="areacn"/>
+                                  <span class="help-block" ng-show="myform.areacn.$invalid">区域名称不能为空</span>
+                              	</div>
+							</div>
+						</div>
+                        <div class="form-group">
+							<div class="col-sm-6">
+				    			<label for="areatype" class="col-sm-2 control-label no-padding-right">区域类型</label>
+								<div class="col-sm-8">
+                           			<select ng-model="formData.areatype" style="width: 100%" id="areatype">
+										<option ng-repeat="x in combo.areatype" value="{{ x.value }}" ng-selected="formData.areatype == x.value" >{{x.key}}</option>
+									</select>
+									<!-- <span class="help-block" ng-show="myform.wftype.$invalid && !myform.wftype.$pristine">流程类别不能为空</span> -->
+                       			</div>
+				    		</div>
+							<div class="col-sm-6">
+				    			<label for="parentid" class="col-sm-2 control-label no-padding-right">上级区域</label>
+								<div class="col-sm-8">
+                           			<select ng-model="formData.parentid" style="width: 100%" id="parentid">
+										<option ng-repeat="x in combo.parentid" value="{{ x.value }}" ng-selected="formData.parentid == x.value" >{{x.key}}</option>
+									</select>
+									<!-- <span class="help-block" ng-show="myform.wftype.$invalid && !myform.wftype.$pristine">流程类别不能为空</span> -->
+                       			</div>
+				    		</div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-lg btn-palegreen" type="submit">确定</button>
+
+                        <a class="btn btn-lg btn-warning" ng-click="cancel()">取消</a>
+                    </div>
+                </form>
+            </script>
+            <script type="text/ng-template" id="confirm.html">
+                <div class="modal-header">
+                    <i class="fa fa-warning"></i>
+                </div>
+                <div class="modal-title">确认删除</div>
+
+                <div class="modal-body">是否确认删除？</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" ng-click="ok()">确定</button>
+                    <button type="button" class="btn btn-warning" ng-click="cancel()">取消</button>
+                </div>
+            </script>
+        </div>
+        <!-- 带标题的内容区域 end -->
+
+    </div>
+    <!-- 响应式布局 end -->
+
+</div>
+<!-- 整体视窗 end-->
+
+<script src="../static/js/app/controllers/area.js"></script>

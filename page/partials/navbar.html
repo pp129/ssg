@@ -1,0 +1,509 @@
+<style>
+    /* input.ng-invalid {
+        border: 1px solid red;
+    } */
+
+    /* input.ng-valid {
+        border: 1px solid green;
+    } */
+
+    .labelInput {
+        border: 1px solid rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .requiredItem {
+        color: red;
+    }
+
+    .dropdown-footer {
+        cursor: pointer;
+    }
+
+    .account-area {
+        right: 1rem !important;
+    }
+
+    .dropdown-login-area .edit a {
+        display: block;
+        width: 100%;
+        text-align: right;
+        cursor: pointer;
+        line-height: 15px !important;
+    }
+
+    .resetPassword a {
+        font-size: 14px;
+        text-align: right;
+    }
+</style>
+<div class="navbar-inner" ng-controller="navbarCtrl">
+    <div class="navbar-container">
+        <!-- Navbar Barnd -->
+        <div class="navbar-header pull-left">
+            <a href="#" class="navbar-brand">
+                <small>
+                    <img src="" alt="厦门港"/>
+                    <!-- <img src="assets/img/logo.png" ng-if="!settings.rtl" alt="" />
+                    <img src="assets/img/logo-rtl.png" ng-if="settings.rtl" alt="" /> -->
+                </small>
+            </a>
+        </div>
+        <!-- /Navbar Barnd -->
+        <!-- Sidebar Collapse -->
+        <div class="sidebar-collapse"></div>
+        <!-- /Sidebar Collapse -->
+        <!-- Account Area and Settings --->
+        <div class="navbar-header pull-right">
+            <div class="navbar-account">
+                <ul class="account-area">
+                    <!-- <li>
+                        <a chat-link class="wave in" title="Chat"></a>
+                    </li> -->
+                    <li>
+                        <a class="login-area dropdown-toggle" data-toggle="dropdown">
+                            <div class="avatar" title="View your public profile">
+                                <img src="{{purl}}">
+                            </div>
+                            <section>
+
+                                <span style="display:none" id="userInfo"></span>
+                                <span style="display:none" id="tmpid">${sessionScope.userid }</span>
+                                <h2><span class="profile"><span>{{userName}}</span></span></h2>
+
+                                <!-- <h2><span class="profile"><span></span>${sessionScope.username}</span></h2> -->
+
+                            </section>
+                        </a>
+                        <!--Login Area Dropdown-->
+                        <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area">
+                            <li class="username"><a>Admin</a></li>
+                            <!-- <li class="email"><a>David.Stevenson@live.com</a></li> -->
+                            <!--Avatar Area-->
+                            <!-- <li>
+                                <div class="avatar-area">
+                                    <img src="assets/img/avatars/adam-jansen.jpg" class="avatar">
+                                    <span class="caption">Change Photo</span>
+                                </div>
+                            </li> -->
+                            <!--Avatar Area-->
+                            <!--/Theme Selector Area-->
+                            <li class="resetPassword">
+                                <a href="javascript:void(0);" ng-click="reset('add','resetForm.html', 'lg')">个人信息</a>
+                            </li>
+                            <li class="resetPassword">
+                                <a href="javascript:void(0);" ng-click="changepwd('','resetPWD.html', 'lg')">修改密码</a>
+                            </li>
+                            <li class="dropdown-footer">
+                                <a href="./login.html">
+                                    退出
+                                </a>
+                            </li>
+                            <!-- <li class="dropdown-footer">
+                                <a href="./sys/userinfo/editbycode?usercode=<s:principal/>">
+                                	个人信息
+                                </a>
+                            </li> -->
+                        </ul>
+                        <!--/Login Area Dropdown-->
+                    </li>
+                    <!-- /Account Area -->
+                    <!--Note: notice that setting div must start right after account area list.
+                    no space must be between these elements-->
+                    <!-- Settings -->
+                </ul>
+                <!-- <div class="setting">
+                </div>
+                <div class="setting-container">
+                    <label>
+                        <input type="checkbox" id="checkbox_fixednavbar" ng-model="settings.fixed.navbar">
+                        <span class="text">固定页头</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" id="checkbox_fixedsidebar" ng-model="settings.fixed.sidebar">
+                        <span class="text">固定菜单栏</span>
+                    </label>
+                    <label>
+                        <input type="checkbox" id="checkbox_fixedheader" ng-model="settings.fixed.header">
+                        <span class="text">固定状态栏</span>
+                    </label>
+                </div> -->
+                <!-- Settings -->
+            </div>
+        </div>
+        <!-- /Account Area and Settings -->
+    </div>
+</div>
+<script type="text/ng-template" id="resetPWD.html">
+    <form class="form-horizontal form-bordered bv-form" id="formpwd" name="formpwd" novalidate="novalidate"
+          ng-submit="submit(formpwd.$valid,$event)">
+        <div class="modal-header">
+            <h3 class="modal-title">修改密码</h3>
+        </div>
+        <div class="modal-body" id="ModalPWD">
+            <div class="form-group">
+                <div class="col-sm-6"
+                     ng-class="{ 'has-error' : formpwd.password.$invalid && !formpwd.password.$pristine }">
+                    <label for="password" class="col-sm-2 control-label no-padding-right">原密码</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="password" ng-model="formData.oldPassword"
+                               title="" onfocus="this.type='password'"
+                               ng-required="formData.newPassword!=null && formData.newPassword!='' "
+                               name="password" ng-minlength="6">
+                        <span class="help-block" ng-show="formpwd.password.$invalid && !formpwd.password.$pristine">密码不能为空且长度不小于6位数</span>
+                    </div>
+                </div>
+                <div class="col-sm-6"
+                     ng-class="{ 'has-error' : formpwd.newpassword.$invalid && !formpwd.newpassword.$pristine }">
+                    <label for="newpassword" class="col-sm-2 control-label no-padding-right">输入新密码</label>
+                    <div class="col-sm-8" style="padding: 0 15px">
+                        <input type="text" placeholder="" id="newpassword" class="form-control" onfocus="this.type='password'"
+                               ng-model="formData.newPassword" name="newpassword" ng-minlength="6">
+                        <span class="help-block"
+                              ng-show="formpwd.newpassword.$invalid && !formpwd.newpassword.$pristine">密码长度不小于6位数</span>
+                    </div>
+                </div>
+                <div class="col-sm-6"></div>
+                <div class="col-sm-6" id="confirmPwdBox"
+                     ng-class="{ 'has-error' : formpwd.confirmpwd.$invalid && !formpwd.confirmpwd.$pristine }"
+                     style="padding-top:1rem">
+                    <label for="confirmpwd" class="col-sm-2 control-label no-padding-right">再次输入密码</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="confirmpwd" name="confirmpwd" onfocus="this.type='password'"
+                               ng-required="formData.newpassword!=null && formData.newpassword!=''"
+                               pw-check="newpassword" ng-model="formData.confirmPwd">
+                        <div class="help-block" ng-messages="formpwd.confirmpwd.$error"
+                             ng-show="formpwd.confirmpwd.$error && formpwd.confirmpwd.$touched">
+                            <p ng-message="pwCheck">密码不一致</p>
+                            <p ng-message="required">确认密码不能为空</p>
+                        </div>
+                        <!-- <span class="help-block" ng-show="formpwd.confirmpwd.$error.pwcheck">密码不一致</span>
+                         <span class="help-block" ng-show="formpwd.confirmpwd.$error.required">确认密码不能为空</span>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="modal-footer">
+                <button class="btn btn-lg btn-palegreen" type="submit">确定</button>
+                <a class="btn btn-lg btn-warning" ng-click="cancel()">取消</a>
+            </div>
+        </div>
+    </form>
+</script>
+<script type="text/ng-template" id="resetForm.html">
+    <form class="form-horizontal form-bordered bv-form" id="formid" name="myform" novalidate="novalidate"
+          ng-submit="submit(myform.$valid,$event)">
+        <div class="modal-header">
+            <h3 class="modal-title">个人信息</h3>
+        </div>
+        <div class="modal-body" id="Modal">
+            <div class="form-group">
+                <div class="col-sm-6"
+                     ng-class="{ 'has-error' : myform.usercode.$invalid && !myform.usercode.$pristine }">
+                    <label for="usercode" class="col-sm-2 control-label no-padding-right">用户名</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="usercode" ng-model="formData.usercode" required
+                               disabled>
+                        <span class="help-block" ng-show="myform.usercode.$invalid && !myform.usercode.$pristine">用户名不能为空</span>
+                    </div>
+                </div>
+                <div class="col-sm-6"
+                     ng-class="{ 'has-error' : myform.username.$invalid && !myform.username.$pristine }">
+                    <label for="username" class="col-sm-2 control-label no-padding-right">姓名</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" name="username" ng-model="formData.username" required/>
+                        <span class="help-block"
+                              ng-show="myform.username.$invalid && !myform.username.$pristine">姓名不能为空</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label for="cancelflag" class="col-sm-2 control-label no-padding-right">有效否</label>
+                    <div class="col-sm-8 select-group-form" style="padding: 0 15px">
+                        <input type="text" class="form-control" name="username" ng-model="cancelflag" disabled/>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="parentid" class="col-sm-2 control-label no-padding-right requiredItem">机构*</label>
+                    <div class="col-sm-8" style="padding: 0 15px">
+                        <input type="text" class="form-control" name="groupid" ng-model="groupid" disabled>
+                    </div>
+                    <div id="TreeModal" class="modal fade" role="dialog" v>
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">机构</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <span style="color:red;">可双击一项选中  或 单击一项后点击下方【确定】选中</span>
+                                    <multiselect-searchtree
+                                            multi-select="false"
+                                            filter-type="hidden"
+                                            data-input-model="stuff"
+                                            data-output-model="checkfunsArr"
+                                            data-callback="CustomCallback(item, selectedItems)"
+                                            data-select-only-leafs="false">
+                                    </multiselect-searchtree>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default closeTree" data-dismiss="modal">确定
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6"
+                     ng-class="{ 'has-error' : myform.email.$invalid && !myform.email.$pristine }">
+                    <label for="email" class="col-sm-2 control-label no-padding-right">邮箱</label>
+                    <div class="col-sm-8">
+                        <input type="email" name="email" ng-model="formData.email" class="form-control"
+                               ng-pattern="/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/">
+                        <span ng-show="myform.email.$invalid && !myform.email.$pristine"
+                              class="help-block">邮箱格式有误</span>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="phone" class="col-sm-2 control-label no-padding-right">电话</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="phone" ng-model="formData.phone" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <label for="loginip" class="col-sm-2 control-label no-padding-right">最后登录IP</label>
+                    <div class="col-sm-8" style="line-height:30px">
+                        {{formData.loginip}}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <label for="logintime"
+                           class="col-sm-2 control-label no-padding-right no-padding-left">最后登录时间</label>
+                    <div class="col-sm-8" style="line-height:30px">
+                        {{logintime}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="modal-footer">
+                <button class="btn btn-lg btn-palegreen" type="submit">确定</button>
+                <a class="btn btn-lg btn-warning" ng-click="cancel()">取消</a>
+            </div>
+        </div>
+    </form>
+</script>
+<script>
+    app.controller('navbarCtrl', function ($scope, $window, $location, $state, $modal, GetUserInfo) {
+        //var userCode = $("#userInfo").html();
+        var userid = '';
+        GetUserInfo.GetUserInfo().then(function (data) {
+            console.log(data);
+            userid = data.data.getUser.user.USERID;
+            $scope.userName = data.data.getUser.user.USERNAME;
+        });
+        $scope.go = function () {
+            $state.go('app.userinfo', {openType: 'showInfo', param: userid})
+        };
+        var tmpid = $("#tmpid").html();
+        //console.log(tmpid);
+        $.ajax({
+            url: '/busi/leman/photourl',
+            type: 'GET',
+            data: {userid: tmpid},
+            async: false,
+            success: function (data) {
+                if (data)
+                    $scope.purl = data;
+                else
+                    $scope.purl = '../static/img/admin.png';
+            },
+            error: function () {
+                $scope.purl = '../static/img/admin.png';
+            }
+        });
+
+        $scope.reset = function (windowClass, templateUrl, size) {
+            $.ajax({
+                url: '../adminjson/roleinfo.edit.admin.json',
+                type: 'GET',
+                async: false,
+                //data: {userid: JSON.stringify(userid.userid)},
+                success: function (data) {
+                    $scope.userarr = {form: data, type: 'update'}
+                }
+            });
+            var modalInstance = $modal.open({
+                windowClass: windowClass,
+                templateUrl: templateUrl,
+                controller: 'resetModalInstanceCtrl',
+                size: size,
+                resolve: { // 把数据传入弹框控制器
+                    items: function () {
+                        return $scope.userarr;
+                    }
+                }
+            });
+            modalInstance.result.then(function (selectedItem) { // 确定后操作
+
+            }, function () { // 关闭后操作
+                // $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+        $scope.changepwd = function (windowClass, templateUrl, size) {
+            var modalInstance = $modal.open({
+                windowClass: windowClass,
+                templateUrl: templateUrl,
+                controller: 'resetPWDModalInstanceCtrl',
+                size: size,
+                resolve: { // 把数据传入弹框控制器
+                    items: function () {
+                        return {};
+                    }
+                }
+            });
+            modalInstance.result.then(function (selectedItem) { // 确定后操作
+                if (selectedItem.success) {
+                    toaster.pop('success', '密码修改成功')
+                } else {
+                    toaster.pop('error', selectedItem.msg)
+                }
+            }, function () { // 关闭后操作
+                // $log.info('Modal dismissed at: ' + new Date());
+            });
+        }
+    });
+    app.controller('resetModalInstanceCtrl', ['$scope', '$modalInstance', 'items', 'toaster', 'CommonQuery', 'commonTools', '$modal', '$window',
+        function ($scope, $modalInstance, items, toaster, CommonQuery, commonTools, $modal, $window) {
+            //console.log(items)
+
+            $scope.formData = items.form;
+            $scope.cancelflag = '有效';
+            $.ajax({
+                type: 'GET',
+                url: '/sys/groupinfo/treelist',
+                success: function (data) {
+                    var jsonstr = '[';
+                    for (var i = 0; i < data.length; i++) {
+                        jsonstr += '{name:\'' + data[i].groupname + '\',id:' + data[i].groupid + ',selected:' + checkSelected(data[i], items.form);
+                        //jsonstr+='label:\''+data[i].funname+'\',funid:'+JSON.stringify(data[i])+',selected:'+checkSelected(data[i].funid,items.form.functions);
+                        if (data[i].childgroupList && data[i].childgroupList.length > 0) {
+                            jsonstr += ',children:[' + aaa(data[i].childgroupList, items.form) + ']';
+                        }
+                        jsonstr += '},';
+                    }
+                    jsonstr = jsonstr.substring(0, jsonstr.length - 1) + ']';
+                    $scope.stuff = eval(jsonstr);
+                }
+            });
+
+            function checkSelected(fun, funform) {
+                if (fun.groupid === funform.groupid) {
+                    $scope.groupid = fun.groupname;
+                    return true;
+                }
+                return false;
+            }
+
+            function aaa(item, funs) {
+                var tempjson = '';
+                for (var i = 0; i < item.length; i++) {
+                    var temppppjson = ',{';
+                    temppppjson += 'name:\'' + item[i].groupname + '\',id:' + item[i].groupid + ',selected:' + checkSelected(item[i], funs);
+                    //temppppjson += 'label:\''+item[i].funname+'\',funid:'+JSON.stringify(item[i])+',selected:'+checkSelected(item[i].funid,funs);
+                    if (item[i].childgroupList && item[i].childgroupList.length > 0) {
+                        temppppjson += ',children:[' + aaa(item[i].childgroupList, funs) + ']';
+                    }
+                    temppppjson += '}';
+                    tempjson += temppppjson;
+                }
+                return tempjson.substring(1);
+            }
+
+            if ($scope.formData.logintime) {
+                $scope.logintime = commonTools.formatDate($scope.formData.logintime, 'yyyy-MM-dd HH24:mi:ss');
+            }
+
+
+            $scope.CustomCallback = function (item) {
+                $scope.formData.groupid = item.id;
+                $scope.groupid = item.name
+            };
+
+            $scope.submit = function (isValid, $event) {
+                var event = $event || window.event;
+                event.preventDefault();
+                if (isValid) {
+                    if ($scope.formData.cancelflag.value) {
+                        $scope.formData.cancelflag = $scope.formData.cancelflag.value
+                    }
+                    if (!$scope.formData.groupid) {
+                        alert('组织机构不能为空');
+                        $scope.formData.cancelflag = {text: '有效', value: '0'};
+                        return false
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: '/sys/userinfo/update',
+                        contentType: 'application/json;charset=UTF-8',
+                        dataType: 'json',
+                        data: JSON.stringify($scope.formData),
+                        success: function (data) {
+                            console.log(data);
+                            $modalInstance.close(data);
+                        }
+                    })
+                }
+            };//submit end
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+        }//controller end
+    ]);
+    app.controller('resetPWDModalInstanceCtrl', ['$scope', '$modalInstance', 'items', 'toaster',
+        function ($scope, $modalInstance, items, toaster) {
+            //console.log(items);
+            $scope.formData = {
+                newPassword: '',
+                oldPassword: ''
+            };
+            $scope.submit = function (isValid, $event) {
+                var event = $event || window.event;
+                event.preventDefault();
+                if (isValid) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/sys/userinfo/updatepassword',
+                        contentType: 'application/x-www-form-urlencoded',
+                        dataType: 'json',
+                        async: false,
+                        data: {
+                            newPassword: $scope.formData.newPassword,
+                            oldPassword: $scope.formData.oldPassword
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            if (data.success) {
+                                toaster.pop('success', '密码修改成功');
+                                $modalInstance.close(data);
+                            } else {
+                                toaster.pop('error', data.msg);
+                                //alert(data.msg)
+                            }
+                        }
+                    })
+                }
+            };//submit end
+
+            $scope.cancel = function () {
+                $modalInstance.dismiss('cancel');
+            };
+        }//controller end
+    ]);
+</script>

@@ -1,0 +1,98 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+    /* Styles specific to this particular page */
+    .scroll-pane {
+        width: 100%;
+        height: 200px;
+        overflow: auto;
+    }
+
+    .horizontal-only {
+        height: auto;
+        max-height: 200px;
+    }
+
+    .header-title {
+        float: left;
+    }
+
+    #stickToLeft, #stickToRight, #clearLabel {
+        display: block;
+        float: left;
+        line-height: 40px;
+        font-size: 24px;
+        margin: 0 1rem;
+        cursor: pointer;
+    }
+
+    #stickToLeft:hover, #stickToRight:hover {
+        color: #2CD911;
+        font-size: 28px;
+    }
+
+    #clearLabel:hover {
+        color: red;
+        font-size: 20px;
+    }
+
+    #clearLabel {
+        margin-left: 0.4rem;
+        font-size: 16px;
+    }
+</style>
+
+<i class="fa fa-caret-left" id="stickToLeft" title="最前"></i>
+
+<div class="header-title scroll-pane horizontal-only">
+
+    <h1 header-title id="navTabTitle" style="width:943px;">
+
+        <a id="dashboard" ui-sref="app.dashboard" class="btn navBtn btn-palegreen btn-xs">主页</a>
+        <span class="closeLabel">&times;</span>
+
+        <a ng-if="currentState.title && currentState.title!='主页' " id="{{currentState.title}}"
+           href="#/app{{currentState.url}}" class="btn navBtn btn-darkorange btn-xs">{{currentState.title}}</a>
+        <span ng-if="currentState.title && currentState.title!='主页' " class="closeLabel">&times;</span>
+
+        <div id="btnBox"></div>
+
+    </h1>
+</div>
+
+<i class="fa fa-caret-right" id="stickToRight" title="最后"></i>
+
+<i class="fa fa-repeat" id="clearLabel" title="清空"></i>
+
+<!--Header Buttons-->
+<div class="header-buttons">
+    <a href="" class="sidebar-toggler" title="拉伸"></a>
+    <a href="" class="refresh" title="刷新"></a>
+    <a href="" class="fullscreen" title="全屏"></a>
+</div>
+<!--Header Buttons End-->
+
+<script type="text/javascript">
+    $(function () {
+        var bars = '.jspHorizontalBar, .jspVerticalBar';
+        var pane = $('.scroll-pane');
+        pane.jScrollPane().hover(
+            //hide show scrollbar
+            function () {
+                $(this).find(bars).stop().fadeTo('fast', 0.9);
+            },
+            function () {
+                $(this).find(bars).stop().fadeTo('fast', 0);
+            }
+        ).find(bars).hide();
+        $('#stickToLeft').bind('click', function () {
+            //api.scrollTo(parseInt($('#toX').val()), parseInt($('#toY').val()));
+            api.scrollTo(0, 0);
+            return false;
+        });
+        var api = pane.data('jsp');
+        $('#stickToRight').bind('click', function () {
+            api.scrollTo($("#navTabTitle")[0].offsetWidth, 0);
+            return false;
+        });
+    });
+</script>

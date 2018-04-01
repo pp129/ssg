@@ -1,0 +1,232 @@
+<!-- 整体视窗 start-->
+<div class="row" id="customerData" ng-controller="customerData" ng-init="init()">
+
+    <!-- 提示框  start-->
+    <toaster-container
+            toaster-options="{'position-class': 'toast-center-center', 'close-button':true}"></toaster-container>
+    <!-- 提示框 end -->
+
+    <!-- 响应式布局 start -->
+    <div class="col-lg-12 col-sm-12 col-xs-12">
+
+        <!-- 带标题的内容区域 start -->
+        <div class="well">
+
+            <!-- 标题 start -->
+            <!-- <div class="header bordered-pink">菜单管理</div> -->
+            <!-- 标题 end -->
+
+            <!-- 条件选择区域 start -->
+            <div class="row" id="checkSection">
+               <!-- 查询条件 -->
+            	<div class="queryBox" ng-repeat="item in allData" ng-style="boxWidth({{item}})">
+                    <!-- 输入框 -->
+                    <div ng-if="!item.isdate && !item.iscombo && !item.istree">
+                        <label class="text col-sm-4 control-label"> 
+                            <span class="text labelText">{{item.cdesc}}</span>
+                        </label>
+                        <input type="text" class="input-sm col-sm-8 labelInput" placeholder="请输入查询条件" ng-model="item.filter">
+                    </div>
+                    <!-- 下拉 -->
+                    <div ng-if="item.iscombo">
+                        <label class="text col-sm-4 control-label"> 
+                            <span class="text labelText">{{item.cdesc}}</span>
+                        </label>
+                        <div class="col-sm-8 select-group-form">
+                            <select ng-model="item.filter" style="width: 100%" class="input-sm">
+                                <option value=""></option>
+		                    	<option ng-repeat="x in item.inoutflag" value="{{ x.value }}">{{x.key}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- 日期范围 -->
+                    <div ng-if="item.isdate">
+                        <label class="text col-sm-4 control-label no-padding-left no-padding-right"> 
+                            <span class="text labelText">{{item.cdesc}}</span>
+                        </label>
+                        <div class="col-sm-8 select-group-form">
+                            <input date-range-picker id="rangeDate" class="labelInput date-picker input-sm date-picker-input" type="text" ng-model="item.dates" options="rangeoptions" clearable="true" />
+                            <!-- <i ng-show="item.dates.startDate||item.dates.endDate" class="fa fa-trash date-picker-clear" ng-click="item.dates = null"></i> -->
+                        </div>
+                    </div>
+                   
+					
+                </div>
+                <!-- 操作按钮区域 start -->
+                <div style="display:block;float:left;margin-left:1rem;margin-bottom:0.5rem" class="row" id="operSection">
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="query()">查询</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="clear()">取消</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="add('add','funForm.html', 'lg')">新增</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right:0.5rem"
+                       ng-click="edit()">修改</a>
+                    <input type="hidden" value="1" id="editPermit"/>
+                    <a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem"
+                       ng-click="deleteList()">删除</a>
+                </div>
+                <!-- 操作按钮区域 end -->
+            </div>
+            <!-- 条件选择区域 end -->
+            <!-- 图表区域 start -->
+            <div class="row"
+                 style="padding-top: 10px; border-top: 3px solid rgb(87, 181, 227)"
+                 id="dataSection">
+                <div class="col-lg-12 col-sm-12 col-xs-12">
+                    <table id="table" class="table table-condensed"
+                           data-filter-control='true'></table>
+                </div>
+            </div>
+            <!-- 图表区域 end -->
+
+            <script type="text/ng-template" id="funForm.html">
+                <form class="form-horizontal form-bordered bv-form" id="formid" name="myform" novalidate="novalidate"
+                      ng-submit="submit(myform.$valid,$event)">
+                    <div class="modal-header">
+                        <h3 class="modal-title">客户资料管理</h3>
+                    </div>
+                    <div class="modal-body" id="Modal">
+                        <div class="form-group">
+							<div class="col-sm-4" ng-class="{ 'has-error' : myform.client.$invalid }">
+								<label for="client" class="col-sm-3 control-label no-padding-right">客户代码</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" name="client" placeholder="客户代码" ng-model="formData.client" required id="client"/>
+									<span class="help-block" ng-show="myform.client.$invalid">客户代码不能为空</span>
+								</div>
+							</div>
+			    			<div class="col-sm-4" ng-class="{ 'has-error' : myform.abbname.$invalid }">
+								<label for="abbname" class="col-sm-3 control-label no-padding-right">客户简称</label>
+                              	<div class="col-sm-8">
+                                  <input type="text" class="form-control" name="abbname" placeholder="客户简称" ng-model="formData.abbname" required id="abbname"/>
+                                  <span class="help-block" ng-show="myform.abbname.$invalid">客户简称不能为空</span>
+                              	</div>
+							</div>
+			    			<div class="col-sm-4" ng-class="{ 'has-error' : myform.clientname.$invalid }">
+								<label for="clientname" class="col-sm-3 control-label no-padding-right">中文名称</label>
+                              	<div class="col-sm-8">
+                                  <input type="text" class="form-control" name="clientname" placeholder="中文名称" ng-model="formData.clientname" required id="clientname"/>
+                                  <span class="help-block" ng-show="myform.clientname.$invalid">中文名称不能为空</span>
+                              	</div>
+							</div>
+						</div>
+			    	<div class="form-group">
+						<div class="col-sm-4">
+				    		<label for="countryno" class="col-sm-3 control-label no-padding-right">船公司否</label>
+							<div class="col-sm-8">
+                           		<select ng-model="formData.conoperflag" style="width: 100%" id="conoperflag">
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+								<!-- <span class="help-block" ng-show="myform.wftype.$invalid && !myform.wftype.$pristine">流程类别不能为空</span> -->
+                       		</div>
+				    	</div>
+						<div class="col-sm-4">
+				    		<label for="shipagentflag" class="col-sm-3 control-label no-padding-right">船代否</label>
+							<div class="col-sm-8">
+                           		<select ng-model="formData.shipagentflag" style="width: 100%" id="shipagentflag">
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+                       		</div>
+				    	</div>
+						<div class="col-sm-4">
+				    		<label for="controlctnflag" class="col-sm-3 control-label no-padding-right">控箱代理否</label>
+							<div class="col-sm-8">
+                           		<select ng-model="formData.controlctnflag" style="width: 100%" id="controlctnflag">
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+                       		</div>
+				    	</div>	
+					</div>
+			    	<div class="form-group">
+						<div class="col-sm-4">
+				    		<label for="truckflag" class="col-sm-3 control-label no-padding-right">车队否</label>
+							<div class="col-sm-8">
+                           		<select ng-model="formData.truckflag" style="width: 100%" id="truckflag">
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+								<!-- <span class="help-block" ng-show="myform.wftype.$invalid && !myform.wftype.$pristine">流程类别不能为空</span> -->
+                       		</div>
+				    	</div>
+						<div class="col-sm-4">
+				    		<label for="conownerflag" class="col-sm-3 control-label no-padding-right">箱主否</label>
+							<div class="col-sm-8">
+                           		<select ng-model="formData.conownerflag" style="width: 100%" id="conownerflag">
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+                       		</div>
+				    	</div>
+						<div class="col-sm-4">
+				    		<label for="ownerflag" class="col-sm-3 control-label no-padding-right">货主否</label>
+							<div class="col-sm-8">
+                           		<select ng-model="formData.ownerflag" style="width: 100%" id="ownerflag">
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+                       		</div>
+				    	</div>	
+					</div>
+			    	<div class="form-group">
+						<div class="col-sm-4">
+				    		<label for="cargoagentflag" class="col-sm-3 control-label no-padding-right">货代否</label>
+							<div class="col-sm-8">
+                           		<select ng-model="formData.cargoagentflag" style="width: 100%" id="cargoagentflag">
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+								<!-- <span class="help-block" ng-show="myform.wftype.$invalid && !myform.wftype.$pristine">流程类别不能为空</span> -->
+                       		</div>
+				    	</div>
+						<div class="col-sm-4">
+				    		<label for="shipperflag" class="col-sm-3 control-label no-padding-right">发货人否</label>
+							<div class="col-sm-8">
+                           		<select ng-model="formData.shipperflag" style="width: 100%" id="shipperflag">
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+                       		</div>
+				    	</div>
+						<div class="col-sm-4">
+				    		<label for="consigneeflag" class="col-sm-3 control-label no-padding-right">收货人否</label>
+							<div class="col-sm-8">
+                           		<select ng-model="formData.consigneeflag" style="width: 100%" id="consigneeflag">
+									<option value="1">是</option>
+									<option value="0">否</option>
+								</select>
+                       		</div>
+				    	</div>	
+					</div>
+					</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-lg btn-palegreen" type="submit">确定</button>
+
+                        <a class="btn btn-lg btn-warning" ng-click="cancel()">取消</a>
+                    </div>
+                </form>
+            </script>
+            <script type="text/ng-template" id="confirm.html">
+                <div class="modal-header">
+                    <i class="fa fa-warning"></i>
+                </div>
+                <div class="modal-title">确认删除</div>
+
+                <div class="modal-body">是否确认删除？</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" ng-click="ok()">确定</button>
+                    <button type="button" class="btn btn-warning" ng-click="cancel()">取消</button>
+                </div>
+            </script>
+        </div>
+        <!-- 带标题的内容区域 end -->
+
+    </div>
+    <!-- 响应式布局 end -->
+
+</div>
+<!-- 整体视窗 end-->
+
+<script src="../static/js/app/controllers/customerData.js"></script>

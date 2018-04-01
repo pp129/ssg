@@ -1,0 +1,293 @@
+<style>
+	/* input.ng-invalid {
+		border: 1px solid red;
+	}
+	
+	input.ng-valid {
+		border: 1px solid green;
+	} */
+	
+	.labelInput {
+		border: 1px solid rgba(0, 0, 0, 0.2) !important;
+	}
+	.requiredItem {
+		color: red;
+	}
+	#TreeModal{height: 512px;}
+</style>
+<!-- 整体视窗 start-->
+<div class="row" id="groupInfo" ng-controller="groupInfo"
+	ng-init="init()">
+
+	<!-- 提示框  start-->
+	<toaster-container
+		toaster-options="{'position-class': 'toast-center-center', 'close-button':true}"></toaster-container>
+	<!-- 提示框 end -->
+
+	<!-- 响应式布局 start -->
+	<div class="col-lg-12 col-sm-12 col-xs-12">
+
+		<!-- 带标题的内容区域 start -->
+		<!-- <div class="well" ng-class="{ 'screen-sm' : screensm,'screen-lg':!screensm }" ng-style="screensmHeight"> -->
+		<div class="well">
+
+			<!-- 标题 start -->
+			<!-- <div class="header bordered-pink">组织机构管理</div> -->
+			<!-- 标题 end -->
+
+			<!-- 条件选择区域 start -->
+			<div class="row" id="checkSection" style="margin-bottom:5px;">
+				<div class="queryBox">
+					<label class="text col-sm-4 control-label"> 
+						<span class="text labelText">机构代码</span>
+					</label>
+					<div class="col-sm-8">
+					    <input type="text" class="input-sm labelInput" ng-model="allData[0].filter" title=""/>
+					</div>
+				</div>
+			    <div class="queryBox">
+					<label class="text col-sm-4 control-label"> 
+						<span class="text labelText">机构名称</span>
+					</label>
+					<div class="col-sm-8">
+					    <input type="text" class="input-sm labelInput" ng-model="allData[1].filter" title=""/>
+					</div>
+				</div>
+				<div class="queryBox">
+					<label class="text col-sm-4 control-label"> 
+						<span class="text labelText">上级机构</span>
+					</label>
+					<div class="col-sm-8 no-padding-left no-padding-right">
+						<div class="input-group">
+					    	<input type="text" class="form-control input-sm" name="parentid" ng-model="parentid" disabled title="">
+							<span class="input-group-btn">
+                            	<a class="btn btn-default fa fa-search" data-toggle="modal" data-target="#searchModal" style="line-height:16px;"></a>
+                     		</span>
+                 		</div>
+					</div>
+					<div id="searchModal" class="modal fade" role="dialog" v>
+	      				<div class="modal-dialog">                    
+	          				<div class="modal-content">
+	              				<div class="modal-header">
+	                  				<button type="button" class="close" data-dismiss="modal">&times;</button>
+	                  				<h4 class="modal-title">上级机构  </h4>
+	              				</div>
+	              				<div class="modal-body">
+	                  				<multiselect-searchtree
+										multi-select="false"
+										filter-type = "hidden"
+										data-input-model="searchStuff" 
+										data-output-model="searchArr"
+										data-select-only-leafs="false">
+									</multiselect-searchtree>
+	              				</div>
+	              				<div class="modal-footer">
+	                  				<button type="button" class="btn btn-default closeTree" data-dismiss="modal" ng-click="SearchCallback()">确定</button>
+	              				</div>
+	          				</div>
+	      				</div>
+	  				</div>
+				</div>
+				<!-- 操作按钮区域 start -->
+               	<div style="display:inline-block;width:36%;float:left;" id="operSection">
+                   	<a href="javascript:void(0);" class="btn btn-primary" style="margin-right:0.5rem" ng-click="query()">查询</a>
+                   	<a href="javascript:void(0);" class="btn btn-primary" style="margin-right:0.5rem" ng-click="clear()">取消</a>
+
+                   		<a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem" ng-click="add('add','groupForm.html', 'lg')">新增</a>
+
+
+               			<a href="javascript:void(0);" class="btn btn-primary" style="margin-right:0.5rem" ng-click="edit()">修改</a>
+               			<input type="hidden" value="1" id="editPermit"/>
+
+
+               			<a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem" ng-click="deleteList()">删除</a>
+
+
+               			<a href="javascript:void(0);" class="btn btn-primary" style="margin-right: 0.5rem" ng-click="batchcancel()">恢复</a>
+
+               	</div>
+               	<!-- 操作按钮区域 end -->
+			</div>
+			<!-- 条件选择区域 end -->
+
+			<!-- 图表区域 start -->
+			<div class="row"
+				style="padding-top: 10px; border-top: 3px solid rgb(87, 181, 227)"
+				id="dataSection">
+				<div class="col-lg-12 col-sm-12 col-xs-12">
+					<table id="table" class="table table-condensed" data-filter-control='true'></table>
+				</div>
+			</div>
+			<!-- 图表区域 end -->
+			<script type="text/ng-template" id="groupForm.html">
+				<form class="form-horizontal form-bordered bv-form" id="formid" name= "myform" novalidate="novalidate" ng-submit="submit(myform.$valid,$event)">
+            	<div class="modal-header">
+                	<h3 class="modal-title">组织机构管理</h3>
+                </div>
+                <div class="modal-body" id="Modal">
+					
+			    		<div class="form-group">
+							<div class="col-sm-6" ng-class="{ 'has-error' : myform.groupcode.$invalid }">
+								<label for="groupcode" class="col-sm-2 control-label no-padding-right">机构代码</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" name="groupcode" placeholder="机构代码" ng-model="formData.groupcode" required id="groupcode"/>
+									<span class="help-block" ng-show="myform.groupcode.$invalid">机构代码不能为空</span>
+								</div>
+							</div>
+			    			<div class="col-sm-6" ng-class="{ 'has-error' : myform.groupname.$invalid }">
+								<label for="groupname" class="col-sm-2 control-label no-padding-right">机构名称</label>
+                              	<div class="col-sm-8">
+                                  <input type="text" class="form-control" name="groupname" placeholder="机构名称" ng-model="formData.groupname" required id="groupname"/>
+                                  <span class="help-block" ng-show="myform.groupname.$invalid">机构名称不能为空</span>
+                              	</div>
+							</div>
+						</div>
+			    		<div class="form-group">
+							<div class="col-sm-6">
+								<label for="shortname" class="col-sm-2 control-label no-padding-right">机构简称</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" name="shortname" placeholder="机构简称" ng-model="formData.shortname" id="shortname"/>
+								</div>
+							</div>
+			    			<div class="col-sm-6">
+								<label for="groupdesc" class="col-sm-2 control-label no-padding-right">机构简介</label>
+                           		<div class="col-sm-8">
+									<textarea type="text" class="form-control" name="groupdesc" placeholder="机构简介" ng-model="formData.groupdesc"></textarea>
+								</div>
+							</div>
+			    		</div>
+			    		<div class="form-group">
+			    			<div class="col-sm-4">
+				    			<label for="cancelflag" class="col-sm-3 control-label no-padding-right">有效否</label>
+								<div class="col-sm-8 select-group-form" style="padding: 0 15px">
+									<select ng-model="formData.cancelflag" style="width: 100%" id="cancelflag">
+										<option ng-repeat="x in combo.cancelflag" value="{{ x.value }}" ng-selected="formData.cancelflag == x.value" >{{x.key}}</option>
+									</select>
+								</div>
+				    		</div>
+			    		<div class="col-sm-4">
+								<div ng-class="{ 'has-error' : myform.parentid.$invalid }">
+									<label for="parentid" class="col-sm-3 control-label no-padding-right">上级机构</label>
+									<div class="col-sm-8" style="padding: 0 15px">
+										<div class="input-group">
+                                			<input type="text" class="form-control" name="parentid" ng-model="parentid" required disabled id="parentid">
+											<span class="input-group-btn">
+                                    			<a class="btn btn-default fa fa-search" data-toggle="modal" data-target="#TreeModal"></a>
+                                			</span>
+                            			</div>
+									</div>
+									<div class="col-sm-3"></div>
+									<span class="help-block col-sm-8" ng-show="myform.parentid.$invalide">上级机构不能为空</span>
+								</div>
+							</div>
+							<div id="TreeModal" class="modal fade" role="dialog" v>
+                				<div class="modal-dialog">                    
+                    				<div class="modal-content">
+                        				<div class="modal-header">
+                            				<button type="button" class="close" data-dismiss="modal">&times;</button>
+                            				<h4 class="modal-title">上级机构  </h4>
+                        				</div>
+                        				<div class="modal-body">
+                            				<multiselect-searchtree
+    											multi-select="false"
+												filter-type = "hidden"
+    											data-input-model="stuff" 
+    											data-output-model="checkfunsArr"
+												
+    											data-select-only-leafs="false">
+											</multiselect-searchtree>
+                        				</div>
+                        				<div class="modal-footer">
+                            				<button type="button" class="btn btn-default closeTree" data-dismiss="modal" ng-click="CustomCallback()">确定</button>
+                        				</div>
+                    				</div>
+                				</div>
+            				</div>
+				    	<div class="col-sm-4">
+				    		<label for="grouptype" class="col-sm-3 control-label no-padding-right">机构类型</label>
+							<div class="col-sm-8">
+                           		<select ng-model="formData.grouptype" style="width: 100%" id="grouptype">
+									<option ng-repeat="x in combo.grouptype" value="{{ x.value }}" ng-selected="formData.grouptype == x.value" >{{x.key}}</option>
+								</select>
+								<!-- <span class="help-block" ng-show="myform.wftype.$invalid && !myform.wftype.$pristine">流程类别不能为空</span> -->
+                       		</div>
+				    	</div>
+			    	</div>
+			    	<div class="form-group">
+						<div class="col-sm-6">
+							<label for="groupfax" class="col-sm-2 control-label no-padding-right">机构传真</label>
+                           	<div class="col-sm-8">
+								<input type="text" class="form-control" name="groupfax" placeholder="机构传真" ng-model="formData.groupfax" id="groupfax"/>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<label for="groupphone" class="col-sm-2 control-label no-padding-right">机构电话</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="groupphone" placeholder="机构电话" ng-model="formData.groupphone" id="groupphone"/>
+							</div>
+						</div>
+					</div>
+			    	<div class="form-group">
+						<div class="col-sm-6">
+							<label for="postcode" class="col-sm-2 control-label no-padding-right">邮编</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="postcode" placeholder="邮编" ng-model="formData.postcode" id="postcode"/>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<label for="address" class="col-sm-2 control-label no-padding-right">地址</label>
+							<div class="col-sm-8">
+                               <input type="text" class="form-control" name="address" placeholder="地址" ng-model="formData.address" id="address"/>
+							</div>
+						</div>
+			    	</div>
+					<!-- 
+					<div class="form-group">
+						<div class="col-sm-6">
+							<label for="groupsort" class="col-sm-2 control-label no-padding-right">排序</label>
+							<div class="col-sm-8">
+                               <input type="number" class="form-control" name="groupsort" placeholder="排序" ng-model="formData.groupsort" integer/>
+                               <span class="help-block" ng-show="myform.grouplevel.$error.integer">不是合法的整数！</span>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<label for="grouplevel" class="col-sm-2 control-label no-padding-right">等级</label>
+							<div class="col-sm-8">
+								<input type="number" class="form-control" name="grouplevel" placeholder="等级" ng-model="formData.grouplevel" integer/>
+ 								<span class="help-block" ng-show="myform.grouplevel.$error.integer">不是合法的整数！</span>
+ 							</div>
+						</div>
+			    	</div>	
+					 -->
+			    	
+			    	
+				</div>
+				<div class="modal-footer">
+                	<button class="btn btn-lg btn-palegreen" type="submit">确定</button>
+                	 
+                    <a class="btn btn-lg btn-warning" ng-click="cancel()">取消</a>
+				</div>
+				</form>
+			</script>
+			<script type="text/ng-template" id="confirm.html">
+        		<div class="modal-header">
+            		<i class="fa fa-warning"></i>
+          		</div>
+         		<div class="modal-title">确认删除</div>
+
+         		<div class="modal-body">是否确认删除？</div>
+         		<div class="modal-footer">
+           			<button type="button" class="btn btn-warning" ng-click="ok()">确定</button>
+					<button type="button" class="btn btn-warning" ng-click="cancel()">取消</button>
+        		</div>
+     		</script>
+		</div>
+		<!-- 带标题的内容区域 end -->
+
+	</div>
+	<!-- 响应式布局 end -->
+
+</div>
+<!-- 整体视窗 end-->
+
+<script src="../static/js/app/controllers/sysGroupInfo.js"></script>

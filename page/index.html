@@ -1,0 +1,90 @@
+<!doctype html>
+<html ng-app="app" ng-controller="AppCtrl">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title ng-bind="title"></title>
+    <link rel="shortcut icon" href="" type="image/x-icon">
+
+    <!--Basic Styles-->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../static/js/lib/jquery/bootstrap-table/bootstrap-editable.css" rel="stylesheet"/>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet"/>
+    <link href="../static/css/weather-icons.min.css" rel="stylesheet"/>
+
+    <!--Fonts-->
+    <style>
+        /*@font-face {
+            font-family: 'WYekan';
+            src: url('/assets/fonts/BYekan.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }*/
+    </style>
+
+    <!--Beyond styles-->
+    <link ng-if="!settings.rtl" href="../static/css/beyond.css" rel="stylesheet"/>
+    <link href="../static/css/demo.css" rel="stylesheet"/>
+    <link href="../static/css/typicons.min.css" rel="stylesheet"/>
+    <link href="../static/css/animate.min.css" rel="stylesheet"/>
+    <link href="../static/css/jquery.jscrollpane.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="../static/js/lib/icheck/skins/all.css">
+
+    <!-- <link ng-href="{{settings.skin}}" rel="stylesheet" type="text/css" /> -->
+
+</head>
+<body>
+<div ui-view autoscroll="false"></div>
+
+
+<!-- Scripts -->
+<script src="../static/js/lib/jquery/jquery.min.js"></script>
+<script src="../static/js/lib/jquery/bootstrap.js"></script>
+<script src="../static/js/lib/jquery/bootstrap-table/bootstrap-editable.js"></script>
+<!-- logFn.apply(console, args); -->
+<script src="../static/js/lib/angular/angular.min.js"></script>
+<script src="../static/js/lib/angular/angular-locale_zh-cn.js"></script>
+
+<script src="../static/js/lib/utilities.js"></script>
+
+<script src="../static/js/lib/angular/angular-animate/angular-animate.js"></script>
+<script src="../static/js/lib/angular/angular-cookies/angular-cookies.js"></script>
+<script src="../static/js/lib/angular/angular-resource/angular-resource.js"></script>
+<script src="../static/js/lib/angular/angular-sanitize/angular-sanitize.js"></script>
+<script src="../static/js/lib/angular/angular-touch/angular-touch.js"></script>
+<script src="../static/js/lib/angular/angular-message/angular-messages.js"></script>
+
+<script src="../static/js/lib/angular/angular-ui-router/angular-ui-router.js"></script>
+<script src="../static/js/lib/angular/angular-ocLazyLoad/ocLazyLoad.js"></script>
+<script src="../static/js/lib/angular/angular-ngStorage/ngStorage.js"></script>
+<script src="../static/js/lib/angular/angular-ui-utils/angular-ui-utils.js"></script>
+<script src="../static/js/lib/angular/angular-breadcrumb/angular-breadcrumb.js"></script>
+
+<script src="../static/js/lib/angular/angular-ui-bootstrap/ui-bootstrap.js"></script>
+<script src="../static/js/lib/jquery/slimscroll/jquery.slimscroll.js"></script>
+<script src="../static/js/lib/icheck/icheck.js"></script>
+
+<!-- App Config and Routing Scripts -->
+<script src="../static/js/app/app.js"></script>
+<script src="../static/js/app/config.js"></script>
+<script src="../static/js/app/config.lazyload.js"></script>
+<script src="../static/js/app/config.router.js"></script>
+<script src="../static/js/app/beyond.js"></script>
+
+
+<!-- Layout Related Directives -->
+<script src="../static/js/app/directives/loading.js"></script>
+<script src="../static/js/app/directives/skin.js"></script>
+<script src="../static/js/app/directives/sidebar.js"></script>
+<script src="../static/js/app/directives/header.js"></script>
+<script src="../static/js/app/directives/navbar.js"></script>
+<script src="../static/js/app/directives/chatbar.js"></script>
+<script src="../static/js/app/directives/widget.js"></script>
+<script src="../static/js/app/directives/userDirecives.js"></script>
+
+<script src="../static/js/jquery.mousewheel.js"></script>
+<script src="../static/js/jquery.jscrollpane.min.js"></script>
+</body>
+</html>

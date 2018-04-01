@@ -1,0 +1,122 @@
+<link rel="stylesheet" href="/static/js/hover/hover.css">
+<div ng-controller="DashboardCtrl" ng-init="loadData()">
+    <!-- 提示框  start-->
+    <toaster-container toaster-options="{'position-class': 'toast-top', 'close-button':true}"></toaster-container>
+    <!-- 提示框 end -->
+
+    <div class="row">
+        <div class="col-sm-12" ng-repeat="item in menu" >
+            <div class="widget">
+                <div class="widget-header bordered-bottom bordered-themesecondary">
+                    <i class="widget-icon fa fa-{{item.iconcls}} themesecondary"></i>
+                    <span class="widget-caption themesecondary">{{item.funname}}</span>
+                </div><!--Widget Header-->
+                <div class="widget-body  no-padding">
+                    <div class="tickets-container" style="overflow: auto">
+                        <div class="col-lg-3 col-sm-6 col-xs-12" ng-repeat="sub in item.childList" ng-if="!sub.gosub">
+                            <div class="databox databox-lg databox-inverted radius-bordered databox-shadowed databox-graded databox-vertical"
+                                 ng-click="go('app.{{sub.funcode}}')">
+                                <div class="databox-top icon-top bg-info no-padding">
+                                    <div class="databox-icon">
+                                        <i class="fa fa-file"></i>
+                                    </div>
+                                </div>
+                                <div class="databox-bottom no-padding bordered-thick bordered-blue">
+                                    <div class="databox-row">
+                                        <div class="databox-cell cell-12 no-padding text-align-center bordered-right bordered-platinum">
+                                            <span class="databox-number databox-number-min lightcarbon no-margin">{{sub.funname}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-xs-12" ng-repeat="subs in item.childList" ng-if="subs.gosub">
+                            <div class="databox databox-lg databox-inverted radius-bordered databox-shadowed databox-graded databox-vertical"
+                                 ng-click="sub(subs)">
+                                <div class="databox-top icon-top bg-info no-padding">
+                                    <div class="databox-icon">
+                                        <i class="fa fa-file"></i>
+                                    </div>
+                                </div>
+                                <div class="databox-bottom no-padding bordered-thick bordered-blue">
+                                    <div class="databox-row">
+                                        <div class="databox-cell cell-12 no-padding text-align-center bordered-right bordered-platinum">
+                                            <span class="databox-number databox-number-min lightcarbon no-margin">{{subs.funname}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12">
+            <div class="well enable">
+                <div class="content">
+                    <ul class="ca-menu row">
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon"><i class="fa fa-home"></i></span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">Personalized to your needs</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon">H</span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">Advanced use of technology</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon">N</span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">Understanding visually</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon">K</span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">Professionals in action</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon">L</span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">24/7 for you needs</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon">L</span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">24/7 for you needs</h4>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6">
+                            <a href="#">
+                                <span class="ca-icon">L</span>
+                                <div class="ca-content">
+                                    <h4 class="ca-sub">24/7 for you needs</h4>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div><!-- content -->
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="../static/js/app/controllers/dashboard.js"></script>
